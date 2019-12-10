@@ -5,6 +5,7 @@ import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoB
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
 import 'package:pedidos/src/componentes/productos/data/repositorioProductos.dart';
+import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 
 class AddProductoPage extends StatefulWidget {
   AddProductoPage({Key key}) : super(key: key);
@@ -32,13 +33,9 @@ class _AddProductoPageState extends State<AddProductoPage> {
   @override
   Widget build(BuildContext context) {
     //ignore: close_sinks
-    
-    final formpedidoBloc = BlocProvider.of<FormPedidosBloc>(context);
-     
-    
-    
-    return  Scaffold(
-                                appBar: AppBar(
+     final formpedidoBloc = BlocProvider.of<FormPedidosBloc>(context);
+     return  Scaffold(
+             appBar: AppBar(
                                 title: TextField(
                                        style: TextStyle(fontSize: 20),
                                        controller: controller,
@@ -64,7 +61,6 @@ class _AddProductoPageState extends State<AddProductoPage> {
                                ),
                              body: BlocBuilder<FormPedidosBloc,FormPedidoState>(
                                    builder: (context,state){
-                               
                                    return resutlSearch(context,state,formpedidoBloc);
                                    },
                              )
@@ -72,112 +68,76 @@ class _AddProductoPageState extends State<AddProductoPage> {
                  );
        
              }
-           
-             Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
+
+Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
                     if(state.query.isEmpty){
                         return Column(
                                children: <Widget>[
-                                            ListTile(
-                                            leading : Icon(Icons.add,color: Colors.green),
-                                            title   : Text("Agregar Producto"),
-                                            onTap   : (){
-                                                  Navigator.pushNamed(context, 'formproducto');
-                                            },
+                                            Flexible(
+                                              flex: 2,
+                                              child: ListTile(
+                                                     leading : Icon(Icons.add,color: Colors.green),
+                                                     title   : Text("Nuevo Producto"),
+                                                     onTap   : ()=> Navigator.pushNamed(context, 'formproducto')
+                                                    ),
                                             ),
-                                            ListTile(
-                                            leading : Icon(Icons.list,color: Colors.green),
-                                            title   : Text("Todos Productos"),
-                                            onTap   : (){},
+                                            Divider(),
+                                            Flexible(
+                                              flex: 2,
+                                              child: Padding(
+                                                     padding: EdgeInsets.symmetric(vertical: 20),
+                                                     child: Text("Todos los Productos",style: TextStyle(fontSize: 25),)
+                                                     ),
+                                            ),
+                                            Flexible(
+                                              flex: 8,
+                                              child:  listaProductos(state.productos, bloc),
                                             )
+                                            
+                                    
                                          ],
                                );
            
                     }
-                   else  return ListView.builder(
-                                itemCount: state.productos.length,
-                                itemBuilder: (context,i){
-                                           
-                                            return  ListTile(
-                                               title: Text(state.productos[i].productoNombre),
-                                                trailing:Switch (
-                                             value: state.productos[i].select,
-                                             onChanged: (value){
-                                                setState(() {
-                                                  state.productos[i].select = value;
-                                                  if(value)bloc.add(AddProducto(producto:state.productos[i]));
-                                                 });
-                                                 },
-                                           ),
-                                             );
-                                },
-                   );
                    
+                   else if(state.query=='todos'){
+                     return listaProductos(state.productos,bloc);
+                   }
                    
-                   
-                   /* return StreamBuilder(
-                     stream :  repo.getProductos().asStream(),
-                     builder: (BuildContext context, AsyncSnapshot<List<Producto>> snapshot) {
-           
-                       if(snapshot.hasData)
-                       return ListView.builder(
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context,i){
-                                    return ListTile(
-                                           title: Text(snapshot.data[i].productoNombre),
-                                           trailing:Switch (
-                                             value: snapshot.data[i].select,
-                                             onChanged: (value){
-                                                setState(() {
-                                                  snapshot.data[i].select = value;
-                                                  if(value)bloc.add(AddProducto(producto:snapshot.data[i]));
-                                                 });
-                                                 },
-                                           ),
-                                    );
-                     },
-                     
-                   );
-                    else return Container();
-                     }
-                   ); */
-                     
-                   
-                  /* return  BlocBuilder<ProductosBloc,ProductosState>(
-                
-                     bloc: ProductosBloc(repo:repo)..add(LoadProductos()),
-                     builder: (context,stateProductos){
-                        if(stateProductos is LoadedProductos){
-                           return ListView.builder(
-                                  itemCount: stateProductos.producto.length,
-                                  itemBuilder: (context,i){
-                                    return ListTile(
-                                           title: Text(stateProductos.producto[i].productoNombre),
-                                           trailing:Switch (
-                                             
-                                             value: stateProductos.producto[i].select,
-                                             onChanged: (value){
-                                                setState(() {
-                                                  
-                                                  stateProductos.producto[i].select = value;
-                                                 // if(value)bloc.add(AddProducto(producto:stateProductos.producto[i]));
-                                                });
-           
-                                               
-                                                
-                                             },
-                                           ),
-                                    );
-                                  },
-                           );
-           
+                   else  {
+                          final listaSugerida = state.productos.where( 
+                                                 (p)=> p.productoNombre
+                                                          .toLowerCase()
+                                                          .startsWith(state.query.toLowerCase()))
+                                                          .toList();
+                          
+                          return listaProductos(listaSugerida,bloc);
                         }
-                        return Center(child: CircularProgressIndicator());
-                     },
-           
-                   ); */
-            
-             }
            
  
 }
 
+Widget listaProductos(List<Producto> productos,bloc) {
+        return ListView.builder(
+              itemCount: productos.length,
+              itemBuilder: (context,i){
+                         return  ListTile(
+                                  title: Text(productos[i].productoNombre),
+                                  trailing:Checkbox(
+                                           value: productos[i].select,
+                                           onChanged: (value){
+                                                              setState(() {
+                                                                productos[i].select = value;
+                                                                if(value)
+                                                                bloc.add(AddProducto(producto:productos[i]));
+                                                              }); 
+                                                             },
+                                          ),
+                           );
+              },          
+        );
+  }
+
+
+
+}

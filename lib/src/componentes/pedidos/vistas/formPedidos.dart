@@ -113,47 +113,43 @@ class _FormPedidosState extends State<FormPedidos> {
          return Container(
                 height      : 300,
                 child       : ListView.builder(
-                itemCount   : producto.length,
-                itemBuilder : (context, i) {
-                               return Dismissible(
-                                      key        : Key(i.toString()),
-                                      background : Container(
-                                                   color : Colors.red,
-                                                   child : Text(
-                                                           "Eliminar", 
-                                                            style : TextStyle(color: Colors.white)
-                                                           ),
-                                                   ),
-                                      child      : ListTile(
-                                                   subtitle : Text(
-                                                              "Precio:${producto[i].precio}",
-                                                              style: TextStyle(color: Colors.red)),
-                                                   title    : Text(
-                                                              producto[i].productoNombre,
-                                                              style: TextStyle(fontSize: 16)
-                                                              ),
-                                                   trailing : Row(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: <Widget>[
-                                                                         IconButton(
-                                                                         color     : Colors.red,
-                                                                         icon      : Icon(Icons.remove),
-                                                                         onPressed : () {}
+                              itemCount   : producto.length,
+                              itemBuilder : (context, i) {
+                                             return Dismissible(
+                                                    key        : Key(i.toString()),
+                                                    background : Container(
+                                                                 color : Colors.red,
+                                                                 child : Text(
+                                                                         "Eliminar", 
+                                                                          style : TextStyle(color: Colors.white)
                                                                          ),
-                                                                         CircleAvatar(
-                                                                         maxRadius       : 18,
-                                                                         child           : Text('${producto[i].cantidad}'),
-                                                                         backgroundColor : Colors.white,
-                                                                         ),
-                                                                         IconButton(
-                                                                         color     : Colors.teal,
-                                                                         icon      : Icon(Icons.add),
-                                                                         onPressed : () {}
-                                                                         ),
-                                                                         ],
-                                                   ),
-                                       ),
-                               );
+                                                                 ),
+                                                    child      : ListTile(
+                                                                 subtitle : Text(
+                                                                            "Precio:${producto[i].precio}",
+                                                                            style: TextStyle(color: Colors.red)),
+                                                                 title    : Text(
+                                                                            producto[i].productoNombre,
+                                                                            style: TextStyle(fontSize: 16)
+                                                                            ),
+                                                                 trailing : Row(
+                                                                            mainAxisSize: MainAxisSize.min,
+                                                                            children: <Widget>[
+                                                                                       Text("Cant",style: TextStyle(fontSize: 20)),
+                                                                                       SizedBox(width: 20),
+                                                                                       GestureDetector (
+                                                                                         onTap: ()=>updateCantidad(context,producto,i),
+                                                                                         child: CircleAvatar(
+                                                                                                maxRadius       : 25,
+                                                                                                child           : Text('${producto[i].cantidad}'),
+                                                                                                backgroundColor : Colors.white,
+                                                                                         ),
+                                                                                       ),
+                                                                                      
+                                                                                       ],
+                                                                 ),
+                                                     ),
+                                             );
                 },
                 )
          );
@@ -230,4 +226,35 @@ class _FormPedidosState extends State<FormPedidos> {
         //prefixIcon : icono,
       );
   }
+
+ updateCantidad(BuildContext context, List<Producto> producto,int i) {
+  showDialog(
+  context: context,
+  builder: (context){
+            return AlertDialog(
+                   title   : Text("Cantidad"),
+                   content : Container(
+                             child: TextFormField(
+                                    autofocus: true,
+                                    keyboardType: TextInputType.number,
+                                    initialValue: producto[i].cantidad.toString(),
+                                    onChanged: (value){producto[i].cantidad = int.parse(value);},
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(border: InputBorder.none,contentPadding:EdgeInsets.all(20)),
+                             ),
+                            ),
+                   actions: <Widget>[
+                            RaisedButton(
+                            textColor: Colors.white,
+                            onPressed: ()=>Navigator.pop(context),
+                            child: Text("Aceptar"),
+                           )
+                          ]
+            );                   
+    }
+  );
+
+
+
+ }
 }

@@ -52,11 +52,11 @@ class _FormProductosState extends State<FormProductos> {
                                                                ),
                                                      child   : Column(
                                                                children: <Widget>[
-                                                                          input("Codigo", _fococodigo, Icon(Icons.person), state.producto),
+                                                                          input("Codigo", _fococodigo, Icon(Icons.vpn_key), state.producto),
                                                                           SizedBox(height: 20),
                                                                           input("Nombre", _foconombre, Icon(Icons.credit_card), state.producto),
                                                                           SizedBox(height: 20),
-                                                                          input("Precio", _focoprecio, Icon(Icons.map), state.producto),
+                                                                          input("Precio", _focoprecio, Icon(Icons.monetization_on), state.producto),
                                                                           SizedBox(height: 20),
                                                                          
                                                                        
@@ -80,6 +80,7 @@ class _FormProductosState extends State<FormProductos> {
          text == 'Precio'    ? textinput = TextInputAction.done 
                              : textinput = TextInputAction.next;
          return TextFormField(
+               keyboardType    : text == 'Precio' ? TextInputType.number :null,
                validator       : (value) => value.isEmpty ? "Requerido": null,
                focusNode       : foco,
                textInputAction : textinput,
@@ -89,7 +90,7 @@ class _FormProductosState extends State<FormProductos> {
                cursorColor     : Colors.teal,
                onChanged       : (value){
                                           switch (text) {
-                                            case "Codicgo"   : state.codigo = value;
+                                            case "Codigo"   : state.codigo = value;
                                                                break;
                                             case "Nombre"    : state.productoNombre = value; 
                                                                break;
@@ -100,9 +101,9 @@ class _FormProductosState extends State<FormProductos> {
                                         },
               onEditingComplete : (){
                                      switch (text) {
-                                       case 'Cliente' : FocusScope.of(context).requestFocus(_foconombre);
+                                       case 'Codigo' :  FocusScope.of(context).requestFocus(_foconombre);
                                                         break;
-                                       case 'Cedula'  : FocusScope.of(context).requestFocus(_focoprecio); 
+                                       case 'Nombre'  : FocusScope.of(context).requestFocus(_focoprecio); 
                                                         break;
                                        default        : break;
                                      }
@@ -119,7 +120,8 @@ class _FormProductosState extends State<FormProductos> {
                               break;
            case "Nombre"    : return state.productoNombre;
                               break;
-           case "Precio"    : return state.precio.toString();
+           case "Precio"    : return state.precio == 0 ? ''
+                                     :state.precio.toString();
                               break;
            default          : break;
          }
@@ -143,7 +145,7 @@ class _FormProductosState extends State<FormProductos> {
   } 
   InputDecoration inputDecorador(icono,text){
      return InputDecoration(
-            helperText     : text=='Precio' ? "Precio" : null,
+        
             helperStyle    : TextStyle(color: Colors.red,fontSize: 18),
             hintStyle      : TextStyle(color: Colors.teal, fontSize: 20.0),
             icon           : icono,

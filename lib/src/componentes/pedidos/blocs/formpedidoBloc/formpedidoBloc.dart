@@ -66,8 +66,8 @@ class FormPedidosBloc extends Bloc<FormPedidoEvent,FormPedidoState>{
 
  Stream<FormPedidoState> _mapResetProductostate() async* {
        state.productos.forEach((p){
-         print(p.productoNombre);
-        p.select = false;
+         p.cantidad = 0;
+         p.select   = false;
        });
  
  yield state.copyWith(pedido:state.pedido,query:'',productos: state.productos); 

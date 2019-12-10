@@ -38,8 +38,8 @@ void main() async {
  Hive.registerAdapter(ProductoAdapter(),1);
  BlocSupervisor.delegate = SimpleBlocDelegate();
 
-final box =await Hive.openBox('productos');
- box.clear();
+/* final box =await Hive.openBox('productos');
+ box.clear(); */
  runApp(MyApp());
 }
 
