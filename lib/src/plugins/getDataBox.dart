@@ -11,12 +11,10 @@ import 'package:hive/hive.dart';
    }
 
    Future<void>  add<T>(data,String box) async {
-    
-      Box<T> setbox =  await Hive.openBox<T>(box);
+      print("hola");
+      Box<T> setbox =  Hive.box<T>(box);
       setbox.add(data);
-     
-      
 
-    
+
   }
  

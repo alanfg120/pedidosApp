@@ -24,7 +24,7 @@ class PedidosBloc extends Bloc<PedidosEvent, PedidosState> {
   }
 
   Stream<PedidosState> _mapLoadPedidosToState() async* {
-    print(state);
+
     final List<Pedido> pedidos = await repo.getPedidos();
     yield LoadedPedidos(pedidos);
   }

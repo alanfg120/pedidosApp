@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>677924523581-udmruuf5fjqjhrq2op3gjn4mhiifj3lm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.677924523581-udmruuf5fjqjhrq2op3gjn4mhiifj3lm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBAFxb_W-IpkDwDMe2kU0ma0FU8yvVono4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>677924523581</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.pedidosalan</string>
+	<key>PROJECT_ID</key>
+	<string>pedidos-a1582</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pedidos-a1582.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:677924523581:ios:53ef17829d5af88fc26454</string>
+	<key>DATABASE_URL</key>
+	<string>https://pedidos-a1582.firebaseio.com</string>
+</dict>
+</plist>

@@ -13,21 +13,18 @@ class ProductosPage extends StatefulWidget {
 }
 
 class _ProductosPageState extends State<ProductosPage> {
+
+  final scafold = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
      
-
-                    return Scaffold(
+              return Scaffold(
+                           key:  scafold,
                            appBar: AppBar(
                                    centerTitle : false,
                                    title       : Text(
                                                  "Productos",
-                                                  style: TextStyle(
-                                                         color      : Colors.teal,
-                                                         fontSize   : 35.0,
-                                                         fontWeight : FontWeight.w300,
-                                                         fontFamily : "Alata"
-                                                         )
+                                                  
                                                ),
                                    actions : <Widget>[
                                               IconButton(

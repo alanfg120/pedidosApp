@@ -8,6 +8,7 @@ class ProductosState extends Equatable{
 
 
 class LoadingProductos extends ProductosState{}
+class UploadedProductos extends ProductosState{}
 
 class LoadedProductos  extends ProductosState{
   final List<Producto> productos;

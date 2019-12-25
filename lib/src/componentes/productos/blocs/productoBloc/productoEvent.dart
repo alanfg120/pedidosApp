@@ -12,6 +12,10 @@ class  LoadProductos extends ProductosEvent{
   @override
   String toString() =>'Obteniendo Productos ....';
 }
+class UploadProductos extends ProductosEvent{
+  @override
+  String toString() =>'Subiendo Productos ....';
+}
 class  UpdateProductos extends ProductosEvent{
   final Producto producto;
   UpdateProductos(this.producto);

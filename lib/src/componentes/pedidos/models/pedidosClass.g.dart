@@ -15,10 +15,10 @@ class PedidoAdapter extends TypeAdapter<Pedido> {
     };
     return Pedido()
       ..nombreCliente = fields[0] as String
-      ..cedulaCliente = fields[1] as String
+      ..cedula = fields[1] as String
       ..direcion = fields[2] as String
       ..productos = (fields[3] as List)?.cast<Producto>()
-      ..total = fields[4] as double
+      ..total = fields[4] as int
       ..fecha = fields[5] as DateTime;
   }
 
@@ -29,7 +29,7 @@ class PedidoAdapter extends TypeAdapter<Pedido> {
       ..writeByte(0)
       ..write(obj.nombreCliente)
       ..writeByte(1)
-      ..write(obj.cedulaCliente)
+      ..write(obj.cedula)
       ..writeByte(2)
       ..write(obj.direcion)
       ..writeByte(3)

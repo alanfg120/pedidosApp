@@ -21,7 +21,7 @@ class FormProductoBloc extends Bloc<FormProductoEvent,FormProductoState>{
    
    Stream<FormProductoState> _mapAddproductoEvent(AddproductoForm event) async* {
     
-    repo.setProducto(event.producto);
+    //repo.setProducto(event.producto);
     yield FormProductoState.inicial();  
   
    }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosState.dart';
+import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
 
 
 class PedidosPage extends StatefulWidget {
@@ -42,12 +43,14 @@ class _PedidosPageState extends State<PedidosPage> {
      );
   }
 
-  Widget listaPedidos(pedidos){
+  Widget listaPedidos(List<Pedido> pedidos){
            return ListView.builder(
                   itemCount   : pedidos.length,
                   itemBuilder : (context,i){
                                    return ListTile(
                                           title: Text(pedidos[pedidos.length-(i+1)].nombreCliente),
+                                          trailing: Text(pedidos[pedidos.length-(i+1)].total.toString()),
+                                          leading: Text(pedidos[pedidos.length-(i+1)].sincronizado.toString()),
                                    );
                   },
            );

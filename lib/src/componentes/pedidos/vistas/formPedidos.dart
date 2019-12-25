@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
@@ -22,6 +23,9 @@ class _FormPedidosState extends State<FormPedidos> {
   final _fococliente  = FocusNode();
   final _fococedula   = FocusNode();
   final _focodirecion = FocusNode();
+  final _clientecontroller = TextEditingController();
+  final _cedulacontroller = TextEditingController();
+  final _direccioncontroller = TextEditingController();
 
   PedidosRepositorio repo = PedidosRepositorio();
 
@@ -33,6 +37,9 @@ class _FormPedidosState extends State<FormPedidos> {
     final pedidoBloc = BlocProvider.of<PedidosBloc>(context);
     return BlocBuilder<FormPedidosBloc, FormPedidoState>(
            builder: (context, state) {
+              _clientecontroller.text = state.pedido.nombreCliente;
+              _cedulacontroller.text  = state.pedido.cedula;
+              _direccioncontroller.text = state.pedido.direcion;
               return Scaffold(
                              key    : _scafold,
                              appBar : AppBar(title: Text("Agregar Pedido")),
@@ -43,21 +50,36 @@ class _FormPedidosState extends State<FormPedidos> {
                                                      key     : _pedidos,
                                                      child   : Container(
                                                      padding : EdgeInsets.symmetric(
-                                                               vertical   : 40, 
+                                                               vertical   : 30, 
                                                                horizontal : 20
                                                                ),
                                                      child   : Column(
                                                                children: <Widget>[
-                                                                          input("Cliente", _fococliente, Icon(Icons.person), state.pedido),
+                                                                          input("Cliente", _fococliente, Icon(Icons.person), state.pedido,_clientecontroller,formpedidoBloc),
                                                                           SizedBox(height: 20),
-                                                                          input("Cedula", _fococedula, Icon(Icons.credit_card), state.pedido),
+                                                                          input("Cedula", _fococedula, Icon(Icons.credit_card), state.pedido,_cedulacontroller),
                                                                           SizedBox(height: 20),
-                                                                          input("Direccion", _focodirecion, Icon(Icons.map), state.pedido),
+                                                                          input("Direccion", _focodirecion, Icon(Icons.map), state.pedido,_direccioncontroller),
                                                                           SizedBox(height: 20),
-                                                                          Text("Productos", style: TextStyle(fontSize: 20)),
+                                                                          Text("Productos", style: TextStyle(fontSize: 18)),
                                                                           SizedBox(height: 10),
                                                                           addproductoBotton(context,formpedidoBloc),
-                                                                          listaProductos(state.pedido.productos, context)
+                                                                          Container(
+                                                                           
+                                                                            padding: EdgeInsets.all(10),
+                                                                            alignment: Alignment.topRight,
+                                                                            child: Text("Cantidad",style: TextStyle(fontSize: 18)),
+                                                                          ),
+                                                                          listaProductos(state.pedido.productos, context,formpedidoBloc),
+                                                                          ListTile(
+                                                                          trailing : Text("${state.total(state.pedido.productos)}",style:TextStyle(
+                                                                                                        fontWeight: FontWeight.bold,
+                                                                                                        fontSize: 25
+                                                                                                       )),
+                                                                          title    : Text("Total"),
+
+                                                                          ),
+                                                                          SizedBox(height: 30)
                                                                        ],
                                                                 ),
                                                       ),
@@ -72,24 +94,25 @@ class _FormPedidosState extends State<FormPedidos> {
     );
   }
 
-  Widget input(String text, FocusNode foco, Icon icono, state) {
+Widget input(String text, FocusNode foco, Icon icono, state,controller,[bloc]) {
 
          TextInputAction textinput;
          text == 'Direccion' ? textinput = TextInputAction.newline 
                              : textinput = TextInputAction.next;
          return TextFormField(
+               controller      : controller,
                validator       : (value) => value.isEmpty ? "Requerido": null,
                focusNode       : foco,
                textInputAction : textinput,
-               decoration      : inputDecorador(icono, text),
-               initialValue    : initialValue(text, state),
+               decoration      : inputDecorador(icono, text,bloc),
+               //initialValue    : initialValue(text, state),
                style           : TextStyle(color: Colors.teal, fontSize: 23.0),
                cursorColor     : Colors.teal,
                onChanged       : (value){
                                           switch (text) {
                                             case "Cliente"   : state.nombreCliente = value;
                                                                break;
-                                            case "Cedula"    : state.cedulaCliente = value; 
+                                            case "Cedula"    : state.cedula = value; 
                                                                break;
                                             case "Direccion" : state.direcion = value;
                                                                break;
@@ -109,70 +132,64 @@ class _FormPedidosState extends State<FormPedidos> {
     );
   }
 
-  Widget listaProductos(List<Producto> producto, context) {
+  Widget listaProductos(List<Producto> producto, context,formpedidoBloc) {
          return Container(
-                height      : 300,
+                height      : 250,
                 child       : ListView.builder(
+                              shrinkWrap: true,
                               itemCount   : producto.length,
                               itemBuilder : (context, i) {
-                                             return Dismissible(
-                                                    key        : Key(i.toString()),
-                                                    background : Container(
-                                                                 color : Colors.red,
-                                                                 child : Text(
-                                                                         "Eliminar", 
-                                                                          style : TextStyle(color: Colors.white)
-                                                                         ),
-                                                                 ),
-                                                    child      : ListTile(
-                                                                 subtitle : Text(
-                                                                            "Precio:${producto[i].precio}",
-                                                                            style: TextStyle(color: Colors.red)),
-                                                                 title    : Text(
-                                                                            producto[i].productoNombre,
-                                                                            style: TextStyle(fontSize: 16)
-                                                                            ),
-                                                                 trailing : Row(
-                                                                            mainAxisSize: MainAxisSize.min,
-                                                                            children: <Widget>[
-                                                                                       Text("Cant",style: TextStyle(fontSize: 20)),
-                                                                                       SizedBox(width: 20),
-                                                                                       GestureDetector (
-                                                                                         onTap: ()=>updateCantidad(context,producto,i),
-                                                                                         child: CircleAvatar(
-                                                                                                maxRadius       : 25,
-                                                                                                child           : Text('${producto[i].cantidad}'),
-                                                                                                backgroundColor : Colors.white,
-                                                                                         ),
-                                                                                       ),
-                                                                                      
-                                                                                       ],
-                                                                 ),
-                                                     ),
-                                             );
+                                             return
+                                                     Slidable(
+                                                     secondaryActions: <Widget>[
+                                                                       IconSlideAction(
+                                                                       caption : 'Eliminar',
+                                                                       color   : Colors.red,
+                                                                       icon    : Icons.delete,
+                                                                       onTap:  ()=> setState((){
+                                                                                    formpedidoBloc.add(DeleteProductoForm(i));
+                                                                                   })
+                                                                       )
+                                                                       ],
+                                                     actionPane : SlidableDrawerActionPane(),
+                                                     child      : ListTile(
+                                                                   subtitle : Text(
+                                                                              "Precio:${producto[i].precio}",
+                                                                              style: TextStyle(color: Colors.red)),
+                                                                   title    : Text(
+                                                                              producto[i].productoNombre,
+                                                                              style: TextStyle(fontSize: 16)
+                                                                              ),
+                                                                   trailing : Row(
+                                                                              mainAxisSize : MainAxisSize.min,
+                                                                              children     : <Widget>[
+                                                                                              
+                                                                                              SizedBox(width: 20),
+                                                                                              GestureDetector (
+                                                                                                onTap: ()=> updateCantidad(context,producto,i),
+                                                                                                child: CircleAvatar(
+                                                                                                       maxRadius       : 25,
+                                                                                                       child           : Text('${producto[i].cantidad}'),
+                                                                                                       backgroundColor : Colors.white,
+                                                                                                )
+                                                                                              )
+                                                                                              ],
+                                                                   ),
+                                                                  
+                                                       ),
+                                                     );
+                                            
                 },
                 )
          );
   }
-
-  String initialValue(String text, state) {
-         switch (text) {
-           case "Cliente"   : return state.nombreCliente;
-                              break;
-           case "Cedula"    : return state.cedulaCliente;
-                              break;
-           case "Direccion" : return state.direcion;
-                              break;
-           default          : break;
-         }
-         return null;
-  }   
+ 
 
   Widget addproductoBotton(contex,bloc){
          return  RaisedButton(
                  onPressed : (){
-                  bloc.add(SearchProducto(''));
-                 Navigator.pushNamed(context,'addproducto');
+                  bloc.add(SearchEvent('','productos'));
+                  Navigator.pushNamed(context,'addproducto');
                  },
                    
                 
@@ -180,7 +197,7 @@ class _FormPedidosState extends State<FormPedidos> {
                  color     : Colors.teal,
                  child     : Text(
                              "Agregar Producto",
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: 15),
                              ),
                  shape     : RoundedRectangleBorder(
                              borderRadius: BorderRadius.circular(15)
@@ -193,6 +210,7 @@ class _FormPedidosState extends State<FormPedidos> {
                 child     : Icon(Icons.check),
                 onPressed : () {
                                if (_pedidos.currentState.validate()){
+
                                     formpedidoBloc.add(ResetProducto());
                                     formpedidoBloc.add(AddPedido(state.pedido));
                                     pedidoBloc.add(UpdatePedidos(state.pedido));
@@ -202,27 +220,24 @@ class _FormPedidosState extends State<FormPedidos> {
                               },
         );
   } 
-  InputDecoration inputDecorador(icono,text){
+  InputDecoration inputDecorador(icono,text,bloc){
      return InputDecoration(
-            hintStyle      : TextStyle(color: Colors.teal, fontSize: 20.0),
-            icon           : icono,
+            hintStyle      : TextStyle(color: Colors.black, fontSize: 15.0),
+            //icon           : icono,
             contentPadding : EdgeInsets.all(10),
             errorStyle     : TextStyle(color: Colors.red),
             hintText       : text,
-            focusedBorder  : OutlineInputBorder(
-                             borderSide: BorderSide(
-                                         color : Colors.teal, 
-                                         style : BorderStyle.solid, 
-                                         width : 2.0
-                                         )
-                            ),
-            enabledBorder  : OutlineInputBorder(
-                             borderSide : BorderSide(
-                                          color : Colors.teal, 
-                                          style : BorderStyle.solid, 
-                                          width : 2.0
-                                          )
-                            ),
+            suffixIcon     : text == 'Cliente'  
+                                      ? IconButton(
+                                        onPressed: (){
+                                         
+                                          Navigator.pushNamed(context,'addcliente');
+                                           bloc.add(SearchEvent("",'clientes'));
+                                        },
+                                        icon: Icon(Icons.search),
+                                      )
+                                      : null,
+            border         : OutlineInputBorder(borderRadius: BorderRadius.circular(50)) 
         //prefixIcon : icono,
       );
   }

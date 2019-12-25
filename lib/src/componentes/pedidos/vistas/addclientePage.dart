@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pedidos/src/componentes/clientes/data/repositorioCliente.dart';
+import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
 
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
-import 'package:pedidos/src/componentes/productos/data/repositorioProductos.dart';
-import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 
-class AddProductoPage extends StatefulWidget {
-  AddProductoPage({Key key}) : super(key: key);
+class AddClientePage extends StatefulWidget {
+  AddClientePage({Key key}) : super(key: key);
 
   @override
-  _AddProductoPageState createState() => _AddProductoPageState();
+  _AddClientePageState createState() => _AddClientePageState();
 }
 
-class _AddProductoPageState extends State<AddProductoPage> {
+class _AddClientePageState extends State<AddClientePage> {
   
-    bool select = false;
+   bool select = false;
    final controller = TextEditingController();  
-   ProductosRepocitorio repo =  ProductosRepocitorio();
+   ClientesRepositorio repo =  ClientesRepositorio();
   
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class _AddProductoPageState extends State<AddProductoPage> {
                                        controller: controller,
                                        autofocus  : true,
                                        decoration : InputDecoration(
-                                                    hintText  : "Buscar Producto",
+                                                    hintText  : "Buscar Cliente",
                                                     hintStyle : TextStyle(fontSize: 20),
                                                     border    : InputBorder.none
                                                    ),
                                        onChanged  : (value){
-                                                      formpedidoBloc.add(SearchEvent(value,'productos'));
+                                                      formpedidoBloc.add(SearchEvent(value,'clientes'));
                                                     },
                                 ),
                                 actions: <Widget>[
@@ -44,7 +44,7 @@ class _AddProductoPageState extends State<AddProductoPage> {
                                          icon      : Icon(Icons.cancel,color: Colors.grey,),
                                          onPressed : (){
                                                         controller.clear();
-                                                        formpedidoBloc.add(SearchEvent('','productos'));
+                                                        formpedidoBloc.add(SearchEvent('','clientes'));
                                                        },
                                          )
                                 ],
@@ -67,8 +67,8 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
                                               flex: 2,
                                               child: ListTile(
                                                      leading : Icon(Icons.add,color: Colors.green),
-                                                     title   : Text("Nuevo Producto"),
-                                                     onTap   : ()=> Navigator.pushNamed(context, 'formproducto')
+                                                     title   : Text("Nuevo Cliente"),
+                                                     onTap   : ()=> Navigator.pushNamed(context, 'formcliente')
                                                     ),
                                             ),
                                             Divider(),
@@ -76,12 +76,12 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
                                               flex: 2,
                                               child: Padding(
                                                      padding: EdgeInsets.symmetric(vertical: 20),
-                                                     child: Text("Todos los Productos",style: TextStyle(fontSize: 25),)
+                                                     child: Text("Todos los Clientes",style: TextStyle(fontSize: 25),)
                                                      ),
                                             ),
                                             Flexible(
                                               flex: 8,
-                                              child:  listaProductos(state.productos, bloc),
+                                              child:  listaProductos(state.clientes, bloc),
                                             )
                                             
                                     
@@ -90,26 +90,25 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
            
                     }
                    
-                   return listaProductos(state.productos,bloc);
+                   return listaProductos(state.clientes,bloc);
                       
            
  
 }
 
-Widget listaProductos(List<Producto> productos,bloc) {
+Widget listaProductos(List<Cliente> clientes,bloc) {
         return ListView.builder(
-              itemCount: productos.length,
+              itemCount: clientes.length,
               itemBuilder: (context,i){
                          return  ListTile(
-                                  title: Text(productos[i].productoNombre),
+                                  title: Text(clientes[i].nombre),
                                   trailing:Checkbox(
-                                           value: productos[i].select,
+                                           value: clientes[i].select,
                                            onChanged: (value){
                                                               setState(() {
-                                                                productos[i].select = value;
+                                                                clientes[i].select = value;
                                                                 if(value)
-                                                                bloc.add(AddProducto(producto:productos[i]));
-                                                                else bloc.add(DeleteProductoForm(i));
+                                                                bloc.add(AddCliente(cliente:clientes[i]));
                                                               }); 
                                                              },
                                           ),

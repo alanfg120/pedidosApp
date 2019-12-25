@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pedidos/src/componentes/clientes/clientesPage.dart';
+import 'package:pedidos/src/componentes/clientes/vistas/clientesPage.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/vistas/pedidosPage.dart';
 import 'package:pedidos/src/componentes/productos/vistas/productosPage.dart';
@@ -133,10 +133,13 @@ class _HomePageState extends State<HomePage> {
 }
 
   void add(int currentindex,PedidosBloc bloc) {
+
        switch (currentindex) {
                 case 0  : Navigator.pushNamed(context, 'formpedidos');     
                           break;
                 case 1  : Navigator.pushNamed(context, 'formproducto');     
+                          break;
+                case 2  : Navigator.pushNamed(context, 'formcliente');     
                           break;
                 default :
        }

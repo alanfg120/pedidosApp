@@ -7,12 +7,14 @@ class FormProductoState extends Equatable {
   FormProductoState({this.producto});
 
   factory FormProductoState.inicial(){
-    final producto = Producto();
-     producto.productoNombre = '';
-     producto.precio         =  0;
-     producto.codigo         =  '';
-     producto.cantidad       =  0;
-     producto.select         = false;
+    final producto = Producto(
+      id: '',
+      productoNombre: '',
+      cantidad: 1,
+      precio: 0,
+      select: false
+    );
+    
     return FormProductoState(producto: producto);
   }
 

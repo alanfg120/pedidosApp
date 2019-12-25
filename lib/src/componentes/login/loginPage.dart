@@ -111,20 +111,7 @@ class _LoginState extends State<Login> {
                                      
                                      errorStyle : TextStyle(color: Colors.pink),
                                      hintText   : text,
-                                     focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                                color: Colors.white,
-                                                                style: BorderStyle.solid,
-                                                                width: 2.0
-                                                               )
-                                                ),
-                                    enabledBorder: OutlineInputBorder(
-                                                   borderSide: BorderSide(
-                                                               color: Colors.white,
-                                                               style: BorderStyle.solid,
-                                                               width: 2.0
-                                                              )
-                                                   ),
+                                     border     : OutlineInputBorder(borderRadius: BorderRadius.circular(20)), 
                                      prefixIcon : icono,
                                      hintStyle  : TextStyle(color: Colors.white,fontSize: 20.0),
                                      

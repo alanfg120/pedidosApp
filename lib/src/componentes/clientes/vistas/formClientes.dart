@@ -1,72 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesEvent.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteEvent.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteState.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclientesBloc.dart';
+import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoBloc.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoEvent.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoState.dart';
-import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoBloc.dart';
-import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoEvent.dart';
-import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 
-class FormProductos extends StatefulWidget {
+class FormCliente extends StatefulWidget {
   
-  FormProductos({Key key}) : super(key: key);
+  FormCliente({Key key}) : super(key: key);
   @override
-  _FormProductosState createState() => _FormProductosState();
+  _FormClienteState createState() => _FormClienteState();
 }
 
-class _FormProductosState extends State<FormProductos> {
+class _FormClienteState extends State<FormCliente> {
 
-  final _productos      = GlobalKey<FormState>();
+  final _clientes      = GlobalKey<FormState>();
   final _scafold      = GlobalKey<ScaffoldState>();
-  final _fococodigo  = FocusNode();
-  final _foconombre  = FocusNode();
-  final _focoprecio = FocusNode();
+  final _fococliente  = FocusNode();
+  final _fococedula   = FocusNode();
+  final _focodirecion = FocusNode();
 
   PedidosRepositorio repo = PedidosRepositorio();
 
   @override
   Widget build(BuildContext context) {
     //ignore: close_sinks
-    final formproductobloc = BlocProvider.of<FormProductoBloc>(context);
+    final formclienteBloc = BlocProvider.of<FormClienteBloc>(context);
     //ignore: close_sinks
-    final productoBloc = BlocProvider.of<ProductosBloc>(context);
-    //ignore: close_sinks
+    final clientesBloc    = BlocProvider.of<ClientesBloc>(context);
+     //ignore: close_sinks
     final formpedidoBloc = BlocProvider.of<FormPedidosBloc>(context);
-    return BlocBuilder<FormProductoBloc, FormProductoState>(
+    return BlocBuilder<FormClienteBloc, FormClienteState>(
            builder: (context, state) {
-                      return Scaffold(
+              return Scaffold(
                              key    : _scafold,
-                             appBar : AppBar(title: Text("Agregar Producto")),
+                             appBar : AppBar(title: Text("Agregar Cliente")),
                              body   : GestureDetector(
                                       onTap : () => FocusScope.of(context).unfocus(),
                                       child : SingleChildScrollView(
                                               child: Form(
-                                                     key     : _productos,
+                                                     key     : _clientes,
                                                      child   : Container(
                                                      padding : EdgeInsets.symmetric(
-                                                               vertical   : 40, 
+                                                               vertical   : 30, 
                                                                horizontal : 20
                                                                ),
                                                      child   : Column(
                                                                children: <Widget>[
-                                                                          input("Codigo", _fococodigo, Icon(Icons.vpn_key), state.producto),
+                                                                          input("Cliente", _fococliente, Icon(Icons.person), state.cliente),
                                                                           SizedBox(height: 20),
-                                                                          input("Nombre", _foconombre, Icon(Icons.credit_card), state.producto),
+                                                                          input("Cedula", _fococedula, Icon(Icons.credit_card), state.cliente),
                                                                           SizedBox(height: 20),
-                                                                          input("Precio", _focoprecio, Icon(Icons.monetization_on), state.producto),
+                                                                          input("Direccion", _focodirecion, Icon(Icons.map), state.cliente),
                                                                           SizedBox(height: 20),
-                                                                         
-                                                                       
+                                                                          
                                                                        ],
                                                                 ),
                                                       ),
                                               ),
                                       ),
                               ),
-                         floatingActionButton: addpedidoButton(formproductobloc,productoBloc,formpedidoBloc,state)
+                         floatingActionButton: addclienteButton(formclienteBloc,clientesBloc,formpedidoBloc,state)
       );
     
     }
@@ -74,13 +73,12 @@ class _FormProductosState extends State<FormProductos> {
     );
   }
 
-  Widget input(String text, FocusNode foco, Icon icono, Producto state) {
+  Widget input(String text, FocusNode foco, Icon icono, Cliente state) {
 
          TextInputAction textinput;
-         text == 'Precio'    ? textinput = TextInputAction.done 
+         text == 'Direccion' ? textinput = TextInputAction.newline 
                              : textinput = TextInputAction.next;
          return TextFormField(
-               keyboardType    : text == 'Precio' ? TextInputType.number :null,
                validator       : (value) => value.isEmpty ? "Requerido": null,
                focusNode       : foco,
                textInputAction : textinput,
@@ -90,20 +88,20 @@ class _FormProductosState extends State<FormProductos> {
                cursorColor     : Colors.teal,
                onChanged       : (value){
                                           switch (text) {
-                                            case "Codigo"   :  state.codigo = value;
+                                            case "Cliente"   : state.nombre= value;
                                                                break;
-                                            case "Nombre"    : state.productoNombre = value; 
+                                            case "Cedula"    : state.cedula = value; 
                                                                break;
-                                            case "Precio"    : state.precio = int.parse(value);
+                                            case "Direccion" : state.direcion = value;
                                                                break;
                                             default          : break;
                                           }
                                         },
               onEditingComplete : (){
                                      switch (text) {
-                                       case 'Codigo' :  FocusScope.of(context).requestFocus(_foconombre);
+                                       case 'Cliente' : FocusScope.of(context).requestFocus(_fococedula);
                                                         break;
-                                       case 'Nombre'  : FocusScope.of(context).requestFocus(_focoprecio); 
+                                       case 'Cedula'  : FocusScope.of(context).requestFocus(_focodirecion); 
                                                         break;
                                        default        : break;
                                      }
@@ -112,16 +110,14 @@ class _FormProductosState extends State<FormProductos> {
     );
   }
 
- 
-
-  String initialValue(String text,Producto state) {
+  
+  String initialValue(String text, state) {
          switch (text) {
-           case "Codigo"   : return state.codigo;
+           case "Cliente"   : return state.nombre;
                               break;
-           case "Nombre"    : return state.productoNombre;
+           case "Cedula"    : return state.cedula;
                               break;
-           case "Precio"    : return state.precio == 0 ? ''
-                                     :state.precio.toString();
+           case "Direccion" : return state.direcion;
                               break;
            default          : break;
          }
@@ -130,14 +126,17 @@ class _FormProductosState extends State<FormProductos> {
 
   
 
-  Widget addpedidoButton(formpedidoBloc,productoBloc,fpedidobloc,FormProductoState state){
+  Widget addclienteButton(FormClienteBloc formclienteBloc,ClientesBloc clientesBloc,formpedidoBloc,FormClienteState state){
          return FloatingActionButton( 
                 child     : Icon(Icons.check),
                 onPressed : () {
-                               if (_productos.currentState.validate()){
-                                    formpedidoBloc.add(AddproductoForm(state.producto));
-                                    productoBloc.add(UpdateProductos(state.producto));
-                                    fpedidobloc.add(UpdateProductoForm(state.producto));
+                               if (_clientes.currentState.validate()){
+                                  
+                                    formclienteBloc.add(AddclienteForm(state.cliente));
+                                    formpedidoBloc.add(UpdateClienteForm(state.cliente));
+                                    clientesBloc.add(UpdateClientes(state.cliente));
+                                    
+                                    
                                     Navigator.pop(context);
                                }
                               },
@@ -145,11 +144,9 @@ class _FormProductosState extends State<FormProductos> {
   } 
   InputDecoration inputDecorador(icono,text){
      return InputDecoration(
-        
-            helperStyle    : TextStyle(color: Colors.red,fontSize: 18),
-            hintStyle      : TextStyle(color: Colors.teal, fontSize: 20.0),
+            hintStyle      : TextStyle(color: Colors.teal, fontSize: 15.0),
             icon           : icono,
-            contentPadding : EdgeInsets.all(10),
+            contentPadding : EdgeInsets.all(5),
             errorStyle     : TextStyle(color: Colors.red),
             hintText       : text,
             focusedBorder  : OutlineInputBorder(
@@ -169,4 +166,6 @@ class _FormProductosState extends State<FormProductos> {
         //prefixIcon : icono,
       );
   }
+
+
 }

@@ -29,6 +29,9 @@ dependencies:
   equatable: ^1.0.1
   hive: ^1.1.1
   path_provider: ^1.4.5
+  flutter_slidable: ^0.5.4
+  firebase_core: ^0.4.1
+  cloud_firestore: ^0.12.9+4
 dev_dependencies:
   flutter_test:
     sdk: flutter

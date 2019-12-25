@@ -21,6 +21,9 @@ class ProductosBloc extends Bloc<ProductosEvent,ProductosState>{
       yield* _mapLoadedProductosEvent();
      if(event is UpdateProductos) 
       yield* _mapUpdateProductosEvent(event,state);
+     if(event is UploadProductos) 
+      yield* _mapUploadProductosEvent();
+
   }
       
      Stream<ProductosState> _mapLoadedProductosEvent() async* {
@@ -30,9 +33,27 @@ class ProductosBloc extends Bloc<ProductosEvent,ProductosState>{
      }
 
   Stream<ProductosState> _mapUpdateProductosEvent(UpdateProductos event, LoadedProductos state) async*{
-  
-    state.productos.add(event.producto);
+    bool exist = false;
+    state.productos.forEach((p){
+    if(p.codigo == event.producto.codigo){
+       exist = true;
+    }
+   });
+    if(!exist){
+       state.productos.add(event.producto);
+       repo.setProducto(event.producto).listen((data){
+            //add(UploadProductos());
+           
+       });
+    }
+    
     yield LoadedProductos(state.productos); 
+
+  }
+
+  Stream<ProductosState> _mapUploadProductosEvent() async* {
+
+    yield UploadedProductos();
 
   }
 

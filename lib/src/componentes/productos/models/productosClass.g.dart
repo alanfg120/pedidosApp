@@ -14,9 +14,9 @@ class ProductoAdapter extends TypeAdapter<Producto> {
       for (var i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Producto()
-      ..codigo = fields[0] as String
+      ..id = fields[0] as String
       ..productoNombre = fields[1] as String
-      ..precio = fields[2] as double
+      ..precio = fields[2] as int
       ..cantidad = fields[3] as int
       ..select = fields[4] as bool;
   }
@@ -26,7 +26,7 @@ class ProductoAdapter extends TypeAdapter<Producto> {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.codigo)
+      ..write(obj.id)
       ..writeByte(1)
       ..write(obj.productoNombre)
       ..writeByte(2)
