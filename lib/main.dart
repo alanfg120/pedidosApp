@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
                                  elevation  : 0.0, 
                                  color      : Colors.white,
                                  brightness : Brightness.light,
-                                 iconTheme  : IconThemeData(color:Colors.teal), 
+                                 //iconTheme  : IconThemeData(color:Colors.teal), 
                                  textTheme  : TextTheme(title : TextStyle(
                                                                 color: Colors.teal,
                                                                 fontSize: 25.0,

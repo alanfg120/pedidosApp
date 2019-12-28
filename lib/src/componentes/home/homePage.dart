@@ -6,7 +6,7 @@ import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.da
 import 'package:pedidos/src/componentes/pedidos/vistas/pedidosPage.dart';
 import 'package:pedidos/src/componentes/productos/vistas/productosPage.dart';
 
-
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:pedidos/src/plugins/sharedpreferences.dart';
 import 'package:pedidos/src/widgets/navigatorBar.dart';
 
@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
 
 
   Widget lastPage;
+  Color lastcolor;
   
   bool syncauto;
   var colorItem    = Colors.grey; 
@@ -31,10 +32,10 @@ class _HomePageState extends State<HomePage> {
   int currentindex    = 0;
 
   List menuItemslist  = [
-                         [Icons.shopping_cart, "Pedidos"      ,0 , Colors.teal],
-                         [Icons.description  , "Productos"    ,1 , Colors.grey],
-                         [Icons.person       , "Clientes"     ,2 , Colors.grey],
-                         [Icons.settings     , "Configuracion",3 , Colors.grey],
+                         [MaterialCommunityIcons.cart_outline          , "Pedidos"      ,0 , Colors.teal],
+                         [MaterialCommunityIcons.format_list_bulleted  , "Productos"    ,1 , Colors.grey],
+                         [MaterialCommunityIcons.account_outline       , "Clientes"     ,2 , Colors.grey],
+                         [MaterialCommunityIcons.settings_outline      , "Configuracion",3 , Colors.grey],
                         ];
   List itemsSettings  = [
                          [Icon(Icons.lock)               ,Text("Cambiar contraseña")],
@@ -62,8 +63,8 @@ class _HomePageState extends State<HomePage> {
                                                         add(currentindex,pedidosbloc);
                                                      },
                                  backgroundColor : Colors.white,
-                                 child           : Icon(Icons.add,color:Colors.teal),
-                                 elevation       : 1.0
+                                 child           : Icon(Icons.add,color:colorAdd(currentindex)),
+                                 elevation       : 7.0
            
            ),
            floatingActionButtonLocation: floatBoton,
@@ -146,6 +147,18 @@ class _HomePageState extends State<HomePage> {
 
   }
  
-  
+  Color colorAdd(int currentindex) {
+       
+       switch (currentindex) {
+                case 0  : lastcolor=Colors.teal;
+                          return Colors.teal;
+                case 1  : lastcolor=Colors.pinkAccent;
+                          return Colors.pinkAccent;
+                case 2  :  lastcolor=Colors.purple;
+                          return Colors.purple;
+                default : return lastcolor;
+       }
+
+  }
 }
 

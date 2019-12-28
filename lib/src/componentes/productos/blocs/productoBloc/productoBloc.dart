@@ -42,7 +42,7 @@ class ProductosBloc extends Bloc<ProductosEvent,ProductosState>{
     if(!exist){
        state.productos.add(event.producto);
        repo.setProducto(event.producto).listen((data){
-            //add(UploadProductos());
+          print(data.documentID);
            
        });
     }

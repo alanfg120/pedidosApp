@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
@@ -19,15 +20,15 @@ class FormProductos extends StatefulWidget {
 
 class _FormProductosState extends State<FormProductos> {
 
-  final _productos      = GlobalKey<FormState>();
-  final _scafold      = GlobalKey<ScaffoldState>();
+  final _productos   = GlobalKey<FormState>();
+  final _scafold     = GlobalKey<ScaffoldState>();
   final _fococodigo  = FocusNode();
   final _foconombre  = FocusNode();
-  final _focoprecio = FocusNode();
+  final _focoprecio  = FocusNode();
 
   PedidosRepositorio repo = PedidosRepositorio();
-
-  @override
+  Color  primaryColor     = Colors.pinkAccent;
+  @override 
   Widget build(BuildContext context) {
     //ignore: close_sinks
     final formproductobloc = BlocProvider.of<FormProductoBloc>(context);
@@ -35,33 +36,47 @@ class _FormProductosState extends State<FormProductos> {
     final productoBloc = BlocProvider.of<ProductosBloc>(context);
     //ignore: close_sinks
     final formpedidoBloc = BlocProvider.of<FormPedidosBloc>(context);
+
     return BlocBuilder<FormProductoBloc, FormProductoState>(
            builder: (context, state) {
                       return Scaffold(
+                             
                              key    : _scafold,
-                             appBar : AppBar(title: Text("Agregar Producto")),
+                             appBar : AppBar(
+                                      title: Text(
+                                             "Agregar Producto",  
+                                              style: TextStyle(color: primaryColor)
+                                              ),
+                                      iconTheme: IconThemeData(color: primaryColor),
+                                      actions: <Widget>[
+                                                Padding(
+                                                padding: EdgeInsets.all(20),
+                                                child: Icon(MaterialCommunityIcons.credit_card_plus),
+                                                )
+                                      ],
+                                      ),
                              body   : GestureDetector(
                                       onTap : () => FocusScope.of(context).unfocus(),
                                       child : SingleChildScrollView(
                                               child: Form(
                                                      key     : _productos,
                                                      child   : Container(
-                                                     padding : EdgeInsets.symmetric(
-                                                               vertical   : 40, 
-                                                               horizontal : 20
+                                                               padding : EdgeInsets.symmetric(
+                                                                         vertical   : 30, 
+                                                                         horizontal : 20
                                                                ),
-                                                     child   : Column(
-                                                               children: <Widget>[
-                                                                          input("Codigo", _fococodigo, Icon(Icons.vpn_key), state.producto),
-                                                                          SizedBox(height: 20),
-                                                                          input("Nombre", _foconombre, Icon(Icons.credit_card), state.producto),
-                                                                          SizedBox(height: 20),
-                                                                          input("Precio", _focoprecio, Icon(Icons.monetization_on), state.producto),
-                                                                          SizedBox(height: 20),
-                                                                         
-                                                                       
-                                                                       ],
-                                                                ),
+                                                               child   : Column(
+                                                                         children: <Widget>[
+                                                                                    input("Codigo", _fococodigo, Icon(Ionicons.ios_barcode,color: primaryColor,), state.producto),
+                                                                                    SizedBox(height: 20),
+                                                                                    input("Nombre", _foconombre, Icon(MaterialCommunityIcons.bottle_wine,color: primaryColor,), state.producto),
+                                                                                    SizedBox(height: 20),
+                                                                                    input("Precio", _focoprecio, Icon(FontAwesome5.money_bill_alt,color: primaryColor,), state.producto),
+                                                                                    SizedBox(height: 20),
+                                                                                   
+                                                                                 
+                                                                                 ],
+                                                                          ),
                                                       ),
                                               ),
                                       ),
@@ -86,8 +101,8 @@ class _FormProductosState extends State<FormProductos> {
                textInputAction : textinput,
                decoration      : inputDecorador(icono, text),
                initialValue    : initialValue(text, state),
-               style           : TextStyle(color: Colors.teal, fontSize: 23.0),
-               cursorColor     : Colors.teal,
+               style           : TextStyle(color: primaryColor),
+               cursorColor     : primaryColor,
                onChanged       : (value){
                                           switch (text) {
                                             case "Codigo"   :  state.codigo = value;
@@ -112,8 +127,6 @@ class _FormProductosState extends State<FormProductos> {
     );
   }
 
- 
-
   String initialValue(String text,Producto state) {
          switch (text) {
            case "Codigo"   : return state.codigo;
@@ -127,11 +140,10 @@ class _FormProductosState extends State<FormProductos> {
          }
          return null;
   }   
-
-  
-
+ 
   Widget addpedidoButton(formpedidoBloc,productoBloc,fpedidobloc,FormProductoState state){
          return FloatingActionButton( 
+                backgroundColor: primaryColor,
                 child     : Icon(Icons.check),
                 onPressed : () {
                                if (_productos.currentState.validate()){
@@ -143,30 +155,18 @@ class _FormProductosState extends State<FormProductos> {
                               },
         );
   } 
+  
   InputDecoration inputDecorador(icono,text){
      return InputDecoration(
-        
             helperStyle    : TextStyle(color: Colors.red,fontSize: 18),
-            hintStyle      : TextStyle(color: Colors.teal, fontSize: 20.0),
+            hintStyle      : TextStyle(color: primaryColor),
             icon           : icono,
-            contentPadding : EdgeInsets.all(10),
+            //contentPadding : EdgeInsets.all(10),
             errorStyle     : TextStyle(color: Colors.red),
             hintText       : text,
-            focusedBorder  : OutlineInputBorder(
-                             borderSide: BorderSide(
-                                         color : Colors.teal, 
-                                         style : BorderStyle.solid, 
-                                         width : 2.0
-                                         )
-                            ),
-            enabledBorder  : OutlineInputBorder(
-                             borderSide : BorderSide(
-                                          color : Colors.teal, 
-                                          style : BorderStyle.solid, 
-                                          width : 2.0
-                                          )
-                            ),
-        //prefixIcon : icono,
+            focusedBorder  : UnderlineInputBorder(
+                             borderSide: BorderSide(color: primaryColor)
+                           )
       );
   }
 }

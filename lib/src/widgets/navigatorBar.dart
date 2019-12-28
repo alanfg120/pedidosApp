@@ -18,6 +18,7 @@ class _NavigatorBarState extends State<NavigatorBar> {
         bottom: false,
         child: Container (
                child: BottomAppBar(
+                      elevation   : 50.0,
                       shape       : CircularNotchedRectangle(),
                       notchMargin : 7.0,
                       child       :  Row(  
@@ -53,8 +54,14 @@ class _NavigatorBarState extends State<NavigatorBar> {
                                 setState((){
                                             widget.items.forEach((itemmenu) {
                                              if(item[2]!=3)
-                                              itemmenu[2]==item[2]  ? itemmenu[3]= Colors.teal.shade400
-                                                                    : itemmenu[3]= Colors.grey;
+                                             if(itemmenu[2]==item[2]){
+                                                if(itemmenu[2]==0) itemmenu[3]= Colors.teal;
+                                                if(itemmenu[2]==1) itemmenu[3]= Colors.pinkAccent;
+                                                if(itemmenu[2]==2) itemmenu[3]= Colors.purple;
+
+                                             }
+                                                
+                                            else itemmenu[3]= Colors.grey;
                                                   
                                             });
                                 });

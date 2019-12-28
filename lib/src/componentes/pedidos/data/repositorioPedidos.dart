@@ -8,7 +8,7 @@ class PedidosRepositorio  {
 Future<List<Pedido>> getPedidos() async { 
        List<Pedido> pedidos=[]; 
        //pedidos = await getDataBox<Pedido>('pedidos');
-       final documentos = await Firestore.instance.collection('panchita/001/pedidos').getDocuments();
+       final documentos = await Firestore.instance.collection('panchita/001/pedidos').orderBy("fecha").getDocuments();
        pedidos = documentos.documents.map((d){
        return Pedido.map(d);
        }).toList();
@@ -16,7 +16,7 @@ Future<List<Pedido>> getPedidos() async {
 }
 
 
-Future<void> setPedido(Pedido pedido) async{
+Stream<DocumentReference> setPedido(Pedido pedido) {
 
 List productos = pedido.productos.map((producto){
 return {
@@ -28,7 +28,7 @@ return {
 };
 }).toList();
 
-Firestore.instance.collection('panchita/001/pedidos').add({
+return Firestore.instance.collection('panchita/001/pedidos').add({
 
 "cedula":pedido.cedula,
 "nombreCliente":pedido.nombreCliente,
@@ -37,7 +37,7 @@ Firestore.instance.collection('panchita/001/pedidos').add({
 "fecha":DateTime.now(),
 "total":pedido.total
 
-});
+}).asStream();
 
  
 

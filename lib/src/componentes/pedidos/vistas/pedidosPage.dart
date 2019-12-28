@@ -1,8 +1,12 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosState.dart';
 import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
+import 'package:pedidos/src/plugins/formato.dart';
 
 
 class PedidosPage extends StatefulWidget {
@@ -12,19 +16,27 @@ class PedidosPage extends StatefulWidget {
 }
 
 class _PedidosPageState extends State<PedidosPage> {
-  
+
+  Color primaryColor= Colors.teal;
+
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-            appBar : AppBar(
+             appBar : AppBar(
                      centerTitle : false,
-                     title       : Text("Pedidos"),
+                     title       : Row(
+                                   children: <Widget>[
+                                             Icon(EvilIcons.cart,size: 40,color: primaryColor),
+                                             SizedBox(width: 20),
+                                             Text("Pedidos",style: TextStyle(color: primaryColor))
+                                             ],
+                     ),
                      actions     : <Widget>[
                                             IconButton(
                                             onPressed : (){},
                                             icon      : Icon(
-                                                        Icons.search,
-                                                        color : Colors.teal,
+                                                        EvilIcons.search,
+                                                        color : primaryColor,
                                                         size  : 30.0,
                                                         )
                                              )
@@ -44,14 +56,24 @@ class _PedidosPageState extends State<PedidosPage> {
   }
 
   Widget listaPedidos(List<Pedido> pedidos){
-           return ListView.builder(
-                  itemCount   : pedidos.length,
-                  itemBuilder : (context,i){
-                                   return ListTile(
-                                          title: Text(pedidos[pedidos.length-(i+1)].nombreCliente),
-                                          trailing: Text(pedidos[pedidos.length-(i+1)].total.toString()),
-                                          leading: Text(pedidos[pedidos.length-(i+1)].sincronizado.toString()),
-                                   );
+          final listpedidos = pedidos.reversed.toList();
+           return ListView.separated(
+                  separatorBuilder : (context,i) => Divider(height: 1),
+                  itemCount        : listpedidos.length,
+                  itemBuilder      : (context,i){
+                                      return ListTile(
+                                             title    : Text(listpedidos[i].nombreCliente),
+                                             subtitle : Text(formatoDate(listpedidos[i].fecha.toString())),
+                                             trailing : Text(
+                                                        formatoMoney(listpedidos[i].total),
+                                                        style: TextStyle(
+                                                               fontWeight: FontWeight.bold,
+                                                               
+                                                               ),
+                                                        ),
+                                             leading: Icon(EvilIcons.check,color: primaryColor),
+                                             onTap: (){},
+                                      );
                   },
            );
   }

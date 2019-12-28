@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesEvent.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteEvent.dart';
@@ -26,7 +27,7 @@ class _FormClienteState extends State<FormCliente> {
   final _focodirecion = FocusNode();
 
   PedidosRepositorio repo = PedidosRepositorio();
-
+  Color primaryColor      = Colors.purple;
   @override
   Widget build(BuildContext context) {
     //ignore: close_sinks
@@ -39,7 +40,19 @@ class _FormClienteState extends State<FormCliente> {
            builder: (context, state) {
               return Scaffold(
                              key    : _scafold,
-                             appBar : AppBar(title: Text("Agregar Cliente")),
+                             appBar : AppBar(
+                                      title    : Text(
+                                                 "Agregar Cliente",
+                                                 style: TextStyle(color: primaryColor),
+                                                 ),
+                                      iconTheme: IconThemeData(color: primaryColor),
+                                      actions: <Widget>[
+                                                Padding(
+                                                padding: EdgeInsets.all(20),
+                                                child: Icon(MaterialCommunityIcons.account_plus_outline),
+                                                )
+                                      ],
+                                      ),
                              body   : GestureDetector(
                                       onTap : () => FocusScope.of(context).unfocus(),
                                       child : SingleChildScrollView(
@@ -52,14 +65,28 @@ class _FormClienteState extends State<FormCliente> {
                                                                ),
                                                      child   : Column(
                                                                children: <Widget>[
-                                                                          input("Cliente", _fococliente, Icon(Icons.person), state.cliente),
+                                                                          input(
+                                                                          "Cliente", 
+                                                                          _fococliente,
+                                                                          Icon(FontAwesome5.user,color: primaryColor),
+                                                                          state.cliente
+                                                                          ),
                                                                           SizedBox(height: 20),
-                                                                          input("Cedula", _fococedula, Icon(Icons.credit_card), state.cliente),
+                                                                          input(
+                                                                          "Cedula",
+                                                                           _fococedula, 
+                                                                           Icon(MaterialCommunityIcons.id_card,color: primaryColor), 
+                                                                           state.cliente
+                                                                           ),
                                                                           SizedBox(height: 20),
-                                                                          input("Direccion", _focodirecion, Icon(Icons.map), state.cliente),
+                                                                          input(
+                                                                          "Direccion", 
+                                                                          _focodirecion, 
+                                                                          Icon(FontAwesome5.map,color: primaryColor),
+                                                                          state.cliente
+                                                                          ),
                                                                           SizedBox(height: 20),
-                                                                          
-                                                                       ],
+                                                                         ],
                                                                 ),
                                                       ),
                                               ),
@@ -84,8 +111,8 @@ class _FormClienteState extends State<FormCliente> {
                textInputAction : textinput,
                decoration      : inputDecorador(icono, text),
                initialValue    : initialValue(text, state),
-               style           : TextStyle(color: Colors.teal, fontSize: 23.0),
-               cursorColor     : Colors.teal,
+               style           : TextStyle(color:primaryColor,fontSize: 23.0),
+               cursorColor     : primaryColor,
                onChanged       : (value){
                                           switch (text) {
                                             case "Cliente"   : state.nombre= value;
@@ -128,41 +155,28 @@ class _FormClienteState extends State<FormCliente> {
 
   Widget addclienteButton(FormClienteBloc formclienteBloc,ClientesBloc clientesBloc,formpedidoBloc,FormClienteState state){
          return FloatingActionButton( 
+                backgroundColor: primaryColor,
                 child     : Icon(Icons.check),
                 onPressed : () {
                                if (_clientes.currentState.validate()){
-                                  
                                     formclienteBloc.add(AddclienteForm(state.cliente));
                                     formpedidoBloc.add(UpdateClienteForm(state.cliente));
                                     clientesBloc.add(UpdateClientes(state.cliente));
-                                    
-                                    
                                     Navigator.pop(context);
-                               }
+                                  }
                               },
         );
   } 
   InputDecoration inputDecorador(icono,text){
      return InputDecoration(
-            hintStyle      : TextStyle(color: Colors.teal, fontSize: 15.0),
+            hintStyle      : TextStyle(color: primaryColor, fontSize: 15.0),
             icon           : icono,
             contentPadding : EdgeInsets.all(5),
             errorStyle     : TextStyle(color: Colors.red),
             hintText       : text,
-            focusedBorder  : OutlineInputBorder(
-                             borderSide: BorderSide(
-                                         color : Colors.teal, 
-                                         style : BorderStyle.solid, 
-                                         width : 2.0
-                                         )
-                            ),
-            enabledBorder  : OutlineInputBorder(
-                             borderSide : BorderSide(
-                                          color : Colors.teal, 
-                                          style : BorderStyle.solid, 
-                                          width : 2.0
-                                          )
-                            ),
+            focusedBorder  : UnderlineInputBorder(
+                             borderSide: BorderSide(color: primaryColor)
+                             )
         //prefixIcon : icono,
       );
   }

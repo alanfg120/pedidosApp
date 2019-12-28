@@ -19,9 +19,10 @@ class _AddClientePageState extends State<AddClientePage> {
    bool select = false;
    final controller = TextEditingController();  
    ClientesRepositorio repo =  ClientesRepositorio();
-  
+   Color primaryColor  = Colors.teal;
   @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
+    
     //ignore: close_sinks
      final formpedidoBloc = BlocProvider.of<FormPedidosBloc>(context);
      return  Scaffold(
@@ -48,6 +49,7 @@ class _AddClientePageState extends State<AddClientePage> {
                                                        },
                                          )
                                 ],
+                                iconTheme: IconThemeData(color: primaryColor),
                                ),
                              body: BlocBuilder<FormPedidosBloc,FormPedidoState>(
                                    builder: (context,state){
@@ -59,7 +61,7 @@ class _AddClientePageState extends State<AddClientePage> {
        
              }
 
-Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
+ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
                     if(state.query.isEmpty){
                         return Column(
                                children: <Widget>[
@@ -75,7 +77,7 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
                                             Flexible(
                                               flex: 2,
                                               child: Padding(
-                                                     padding: EdgeInsets.symmetric(vertical: 20),
+                                                     padding: EdgeInsets.symmetric(vertical: 10),
                                                      child: Text("Todos los Clientes",style: TextStyle(fontSize: 25),)
                                                      ),
                                             ),
@@ -96,7 +98,7 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
  
 }
 
-Widget listaProductos(List<Cliente> clientes,bloc) {
+ Widget listaProductos(List<Cliente> clientes,bloc) {
         return ListView.builder(
               itemCount: clientes.length,
               itemBuilder: (context,i){

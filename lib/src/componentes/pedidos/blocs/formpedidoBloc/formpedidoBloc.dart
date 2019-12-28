@@ -50,7 +50,10 @@ class FormPedidosBloc extends Bloc<FormPedidoEvent,FormPedidoState>{
   }
 
   Stream<FormPedidoState> _mapAddpedidoState(AddPedido event) async* {
-     repo.setPedido(event.pedido);
+     repo.setPedido(event.pedido).listen((event){
+       print(event.documentID);   
+  
+     });
      yield state.copyWith(
                  pedido: initialState.pedido,
                  query: '',
