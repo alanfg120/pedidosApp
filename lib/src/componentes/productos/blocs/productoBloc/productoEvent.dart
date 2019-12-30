@@ -1,26 +1,30 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 
-
-class ProductosEvent extends Equatable{
-      @override
-      List<Object> get props => [];    
-}
-
-class  LoadProductos extends ProductosEvent{
+class ProductosEvent extends Equatable {
   @override
-  String toString() =>'Obteniendo Productos ....';
+  List<Object> get props => [];
 }
-class UploadProductos extends ProductosEvent{
+
+class LoadProductos extends ProductosEvent {
   @override
-  String toString() =>'Subiendo Productos ....';
+  String toString() => 'Obteniendo Productos ....';
 }
-class  UpdateProductos extends ProductosEvent{
+
+class UploadProductos extends ProductosEvent {
+  final String codidoProducto;
+  UploadProductos(this.codidoProducto);
+  List<Object> get props => [codidoProducto];
+  String toString() =>'Subiendo Productos a Firebase....';
+
+}
+
+class UpdateProductos extends ProductosEvent {
   final Producto producto;
   UpdateProductos(this.producto);
   @override
   List<Object> get props => [producto];
   @override
-  String toString() =>'Actulizando Productos ....';
+  String toString() => 'Actulizando Productos ....';
 }
+

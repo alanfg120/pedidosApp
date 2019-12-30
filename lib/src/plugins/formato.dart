@@ -1,7 +1,9 @@
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:intl/intl.dart';
 
-String formatoDate( String fecha) {
+String formatoDate( dynamic fecha) {
+
+  if(fecha is DateTime) fecha.toString();
   if (fecha == null)
     return null;
   else

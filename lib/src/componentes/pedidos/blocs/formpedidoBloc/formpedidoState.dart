@@ -8,37 +8,38 @@ class FormPedidoState extends Equatable {
   final String query;
   final List<Producto> productos;
   final List<Cliente> clientes;
-
-  FormPedidoState({
-                  this.pedido, 
-                  this.query, 
-                  this.productos,
-                  this.clientes
-                  
-                  });
+  final Cliente cliente;
+  FormPedidoState(
+      {this.pedido, this.query, this.productos, this.clientes, this.cliente});
 
   factory FormPedidoState.inicial() {
     final query = '';
     final pedido = Pedido(
-      id: '',
-      cedula: '',
-      nombreCliente: '',
-      direcion: '',
-      productos: [],
-      total: 0,
-    );
+        id: '',
+        cliente: Cliente(
+            nombre: '',
+            cedula: '',
+            direcion: '',
+            select: false,
+            sincronizado: true),
+        productos: [],
+        total: 0,
+        sincronizado: true);
 
-    return FormPedidoState(pedido: pedido, query: query, productos: [],clientes: []);
+    return FormPedidoState(
+        pedido: pedido, query: query, productos: [], clientes: []);
   }
 
   FormPedidoState copyWith(
-      {Pedido pedido, String query, List<Producto> productos,List<Cliente> clientes}) {
+      {Pedido pedido,
+      String query,
+      List<Producto> productos,
+      List<Cliente> clientes}) {
     return FormPedidoState(
         pedido: pedido ?? this.pedido,
         query: query ?? this.query,
         productos: productos ?? this.productos,
-        clientes: clientes ?? this.clientes
-        );
+        clientes: clientes ?? this.clientes);
   }
 
   int total(List<Producto> productos) {
@@ -49,14 +50,11 @@ class FormPedidoState extends Equatable {
     pedido.total = ptotal;
     return ptotal;
   }
-   
-  getCliente(Cliente cliente){
-    
-    pedido.nombreCliente = cliente.nombre;
-    pedido.cedula        = cliente.cedula;
-    pedido.direcion      = cliente.direcion;
+
+  getCliente(Cliente cliente) {
+    pedido.cliente = cliente;
   }
 
   @override
-  List<Object> get props => [pedido, query, productos,clientes];
+  List<Object> get props => [pedido, query, productos, clientes, cliente];
 }

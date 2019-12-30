@@ -14,5 +14,6 @@ class AddclienteForm extends FormClienteEvent{
   AddclienteForm(this.cliente);
   @override
   List<Object> get props => [cliente];
-
+ @override
+  String toString() =>'Reset Formulario Cliente....';
 }

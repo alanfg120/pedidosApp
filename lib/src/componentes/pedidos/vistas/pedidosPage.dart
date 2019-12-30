@@ -41,13 +41,26 @@ class _PedidosPageState extends State<PedidosPage> {
                                                         )
                                              )
                                        ],
+                    elevation: 1,
            ),
            body   : BlocBuilder<PedidosBloc,PedidosState>(
                     builder: (context,state){
                                if(state is LoadingPedidos)
                                  return Center(child: CircularProgressIndicator());
                                if(state is LoadedPedidos){
-                                 return  listaPedidos(state.pedidos);
+                                return Column(
+                                  children: <Widget>[
+                                    ListTile(
+                                    trailing: Text("Total Pedido"),
+                                    title: Text("Nombre del Cliente"),
+                                    leading: Icon(MaterialCommunityIcons.cloud_upload_outline),
+                                    ),
+                                    Expanded(
+                                    child: listaPedidos(state.pedidos)
+                                    )
+                                  ],
+                                );
+                                //return  listaPedidos(state.pedidos);
                                }
                                  return Container();
                     },
@@ -57,24 +70,34 @@ class _PedidosPageState extends State<PedidosPage> {
 
   Widget listaPedidos(List<Pedido> pedidos){
           final listpedidos = pedidos.reversed.toList();
-           return ListView.separated(
-                  separatorBuilder : (context,i) => Divider(height: 1),
-                  itemCount        : listpedidos.length,
-                  itemBuilder      : (context,i){
-                                      return ListTile(
-                                             title    : Text(listpedidos[i].nombreCliente),
-                                             subtitle : Text(formatoDate(listpedidos[i].fecha.toString())),
-                                             trailing : Text(
-                                                        formatoMoney(listpedidos[i].total),
-                                                        style: TextStyle(
-                                                               fontWeight: FontWeight.bold,
-                                                               
-                                                               ),
-                                                        ),
-                                             leading: Icon(EvilIcons.check,color: primaryColor),
-                                             onTap: (){},
-                                      );
-                  },
+           return  ListView.separated(
+                    
+                    separatorBuilder : (context,i) => Divider(height: 1),
+                    itemCount        : listpedidos.length,
+                    itemBuilder      : (context,i){
+                                        
+                                        return ListTile(
+                                               title    : Text(listpedidos[i].cliente.nombre),
+                                               subtitle : Text(formatoDate(listpedidos[i].fecha.toString())),
+                                               trailing : Text(
+                                                          //listpedidos[i].id,
+                                                          formatoMoney(listpedidos[i].total),
+                                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                                          ),
+                                               leading  : !listpedidos[i].sincronizado
+                                                          ? Icon(EvilIcons.check,color:primaryColor)
+                                                          : SizedBox(
+                                                            height : 20,
+                                                            width  : 20,
+                                                            child  : CircularProgressIndicator(
+                                                                     strokeWidth : 2,
+                                                                     valueColor  : AlwaysStoppedAnimation(primaryColor),
+                                                            ),
+                                                          ),
+                                               onTap: (){},
+                                        );
+                    },
+             
            );
   }
 }

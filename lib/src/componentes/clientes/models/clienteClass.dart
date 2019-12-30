@@ -8,21 +8,19 @@ part 'clienteClass.g.dart';
 class Cliente {
 
 String id; 
-@HiveField(0)
 String nombre;
-@HiveField(1)
 String cedula;
-@HiveField(2)
 String direcion;
-
-bool select;
+bool   select;
+bool   sincronizado;
 
 Cliente({
   this.id,
   this.cedula,
   this.direcion,
   this.nombre,
-  this.select
+  this.select,
+  this.sincronizado
 });
 
 Cliente.map(DocumentSnapshot document){
@@ -32,5 +30,6 @@ cedula   = document.data['cedula'];
 nombre   = document.data['nombre'];
 direcion = document.data['direccion'];
 select   = document.data['select'];
+sincronizado = document.metadata.hasPendingWrites;
 }
 }

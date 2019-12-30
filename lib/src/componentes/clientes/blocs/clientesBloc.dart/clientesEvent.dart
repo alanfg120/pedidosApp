@@ -24,3 +24,11 @@ class  UpdateClientes extends ClientesEvent{
   @override
   String toString() =>'Actulizando Clientes ....';
 }
+class  UploadClienteFireBase extends ClientesEvent{
+  final String cedula;
+  UploadClienteFireBase(this.cedula);
+  @override
+  List<Object> get props => [cedula];
+  @override
+  String toString() =>'Subiendo Cliente A firebase ....';
+}

@@ -22,7 +22,7 @@ class ProductosBloc extends Bloc<ProductosEvent,ProductosState>{
      if(event is UpdateProductos) 
       yield* _mapUpdateProductosEvent(event,state);
      if(event is UploadProductos) 
-      yield* _mapUploadProductosEvent();
+      yield* _mapUploadProductosEvent(event,state);
 
   }
       
@@ -34,6 +34,7 @@ class ProductosBloc extends Bloc<ProductosEvent,ProductosState>{
 
   Stream<ProductosState> _mapUpdateProductosEvent(UpdateProductos event, LoadedProductos state) async*{
     bool exist = false;
+
     state.productos.forEach((p){
     if(p.codigo == event.producto.codigo){
        exist = true;
@@ -42,7 +43,8 @@ class ProductosBloc extends Bloc<ProductosEvent,ProductosState>{
     if(!exist){
        state.productos.add(event.producto);
        repo.setProducto(event.producto).listen((data){
-          print(data.documentID);
+        
+           add(UploadProductos(event.producto.codigo));
            
        });
     }
@@ -51,13 +53,23 @@ class ProductosBloc extends Bloc<ProductosEvent,ProductosState>{
 
   }
 
-  Stream<ProductosState> _mapUploadProductosEvent() async* {
-
-    yield UploadedProductos();
-
-  }
-
+ Stream<ProductosState>  _mapUploadProductosEvent(UploadProductos event,LoadedProductos state) async* {
+ 
+   state.productos.forEach((p){
+     if(p.codigo==event.codidoProducto)
+        p.sincronizado= false;
+      
+   });
   
+
+  yield UploadFireBaseProductos();
+  yield LoadedProductos(state.productos);
+
+ }
 
   
 }
+
+  
+
+  

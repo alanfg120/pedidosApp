@@ -22,7 +22,17 @@ class  UpdatePedidos extends PedidosEvent{
   String toString() =>'Actulizando Pedidos ....';
 }
 
+class  UploadPedidosFireBase extends PedidosEvent{
+  final String id;
 
+  UploadPedidosFireBase(this.id);
+
+  @override
+   List<Object> get props => [id]; 
+
+  @override
+   String toString() =>'Subiendo Pedidos  a Firebase....';
+}
 
 
 

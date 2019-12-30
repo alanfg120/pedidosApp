@@ -12,7 +12,8 @@ class FormClienteState extends Equatable {
      cedula: '',
      nombre: '',
      direcion: '',
-     select: false
+     select: false,
+     sincronizado: true
     );
     
     return FormClienteState(cliente: cliente);

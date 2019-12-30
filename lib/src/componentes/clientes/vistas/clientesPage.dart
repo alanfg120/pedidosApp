@@ -44,7 +44,18 @@ class _ClientesPageState extends State<ClientesPage> {
                 if(state is LoadingClientes)
                 return  CircularProgressIndicator();
                 if (state is LoadedClientes)
-                return listadeClientes(state.clientes);
+                 return Column(
+                        children: <Widget>[
+                                  ListTile(
+                                  trailing : Text("Cedula"),
+                                  title    : Text("Nombre del Cliente"),
+                                  leading  : Icon(MaterialCommunityIcons.cloud_upload_outline),
+                                  ),
+                                  Expanded(
+                                  child: listadeClientes(state.clientes)
+                                  )
+                        ],
+                 );
                 return Container();
              }
 
@@ -59,8 +70,19 @@ class _ClientesPageState extends State<ClientesPage> {
         itemCount: clientes.length,
         itemBuilder: (context,i){
              return ListTile(
-               title: Text("${clientes[i].nombre}"),
-               leading: Icon(EvilIcons.check,color: primaryColor),
+               title    : Text("${clientes[i].nombre}"),
+               subtitle : Text("${clientes[i].direcion}"),
+               trailing : Text("${clientes[i].cedula}"), 
+               leading  : !clientes[i].sincronizado
+                          ? Icon(EvilIcons.check,color:primaryColor)
+                          : SizedBox(
+                            height : 20,
+                            width  : 20,
+                            child  : CircularProgressIndicator(
+                                     strokeWidth : 2,
+                                     valueColor  : AlwaysStoppedAnimation(primaryColor),
+                            ),
+             ),
              );
 
         },

@@ -8,7 +8,7 @@ class ProductosRepocitorio{
 
 
 Future<List<Producto>> getProductos() async {
-    
+   
 List<Producto> productos=[];
 /* productos = await getDataBox<Producto>('productos'); */
 final documentos =await Firestore.instance.collection('panchita/001/productos').getDocuments();
@@ -22,11 +22,11 @@ return productos;
 Stream<DocumentReference> setProducto(Producto producto)  {
 
 return Firestore.instance.collection('panchita/001/productos').add({
- "productoNombre":producto.productoNombre,
- "codigo":producto.codigo,
- "cantidad":producto.cantidad,
- "select":producto.select,
- "precio":producto.precio
+ "productoNombre" : producto.productoNombre,
+ "codigo"         : producto.codigo,
+ "cantidad"       : producto.cantidad,
+ "select"         : producto.select,
+ "precio"         : producto.precio
  }).asStream();
 
 }

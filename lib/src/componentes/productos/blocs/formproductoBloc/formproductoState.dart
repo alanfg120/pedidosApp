@@ -12,7 +12,8 @@ class FormProductoState extends Equatable {
       productoNombre: '',
       cantidad: 1,
       precio: 0,
-      select: false
+      select: false,
+      sincronizado: true
     );
     
     return FormProductoState(producto: producto);

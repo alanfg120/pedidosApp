@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
+import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 import 'package:pedidos/src/plugins/formato.dart';
 
@@ -38,11 +41,13 @@ class _FormPedidosState extends State<FormPedidos> {
     final formpedidoBloc = BlocProvider.of<FormPedidosBloc>(context);
     //ignore: close_sinks
     final pedidoBloc = BlocProvider.of<PedidosBloc>(context);
+    //ignore: close_sinks
+    final clienteBloc = BlocProvider.of<ClientesBloc>(context);
     return BlocBuilder<FormPedidosBloc, FormPedidoState>(
            builder: (context, state) {
-              _clientecontroller.text = state.pedido.nombreCliente;
-              _cedulacontroller.text  = state.pedido.cedula;
-              _direccioncontroller.text = state.pedido.direcion;
+              _clientecontroller.text = state.pedido.cliente.nombre;
+              _cedulacontroller.text  = state.pedido.cliente.cedula;
+              _direccioncontroller.text = state.pedido.cliente.direcion;
            return Scaffold(
                   key    : _scafold,
                   appBar : AppBar(
@@ -116,13 +121,13 @@ class _FormPedidosState extends State<FormPedidos> {
                                               ),
                                       ),
                               ),
-                   floatingActionButton: addpedidoButton(formpedidoBloc,pedidoBloc,state)
+                   floatingActionButton: addpedidoButton(formpedidoBloc,pedidoBloc,clienteBloc,state)
       );
     }
     );
   }
 
-  Widget input(String text,FocusNode foco,Icon icono,state,controller,[bloc]) {
+  Widget input(String text,FocusNode foco,Icon icono,Pedido state,controller,[bloc]) {
          
          TextInputAction textinput;
          text == 'Direccion' ? textinput = TextInputAction.newline 
@@ -137,11 +142,11 @@ class _FormPedidosState extends State<FormPedidos> {
                 cursorColor     : primaryColor,
                 onChanged       : (value){
                                            switch (text) {
-                                                   case "Cliente"   : state.nombreCliente = value;
+                                                   case "Cliente"   : state.cliente.nombre = value;
                                                                       break;
-                                                   case "Cedula"    : state.cedula = value; 
+                                                   case "Cedula"    : state.cliente.cedula = value; 
                                                                       break;
-                                                   case "Direccion" : state.direcion = value;
+                                                   case "Direccion" : state.cliente.direcion = value;
                                                                       break;
                                                    default          : break;
                                            }
@@ -227,7 +232,7 @@ class _FormPedidosState extends State<FormPedidos> {
          );
   }  
 
-  Widget addpedidoButton(FormPedidosBloc formpedidoBloc,pedidoBloc,state){
+  Widget addpedidoButton(FormPedidosBloc formpedidoBloc,pedidoBloc,clienteBloc,state){
          return FloatingActionButton( 
                 child     : Icon(Icons.check),
                 onPressed : () {
@@ -235,6 +240,7 @@ class _FormPedidosState extends State<FormPedidos> {
                                       formpedidoBloc.add(ResetProducto());
                                       formpedidoBloc.add(AddPedido(state.pedido));
                                       pedidoBloc.add(UpdatePedidos(state.pedido));
+                                      clienteBloc.add(UpdateClientes(state.pedido.cliente));
                                       Navigator.pop(context);
                                 }
                               },

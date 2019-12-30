@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -43,31 +44,64 @@ class _ProductosPageState extends State<ProductosPage> {
                                               )
                                   ],
                            ),
-                           body: BlocBuilder<ProductosBloc,ProductosState>( 
-                                 builder: (context,state){
-                                   if(state is LoadingProductos)
-                                   return Center(child: CircularProgressIndicator());
-                                   if(state is LoadedProductos)
-                                   return listaProductos(state.productos);
-                                   return Container();
-                                 } 
+                           body: BlocListener<ProductosBloc,ProductosState>(
+                                 listener: (context,state){
+                                  
+                                 },
+                                 child: BlocBuilder<ProductosBloc,ProductosState>( 
+                                   builder: (context,state){
+
+                                     if(state is LoadingProductos)
+                                        return Center(child: CircularProgressIndicator());
+                                     if(state is LoadedProductos)
+                                        return Column(
+                                              children: <Widget>[
+                                                        ListTile(
+                                                        trailing : Text("Precio"),
+                                                        title    : Text("Nombre del Producto"),
+                                                        leading  : Icon(MaterialCommunityIcons.cloud_upload_outline),
+                                                        ),
+                                                        Expanded(
+                                                        child: listaProductos(state.productos)
+                                                        )
+                                              ],
+                                        );
+
+                                     //return listaProductos(state.productos);
+                                     return Container();
+                                   } 
+                             ),
                            )
                     );
           }
 
   Widget listaProductos(List<Producto>producto) {
-
+    
     final listproductos = producto.reversed.toList();
-    return ListView.separated(
 
+    return ListView.separated(
+       
       separatorBuilder: (context,i)=>Divider(height: 1),
       itemCount: producto.length,
       itemBuilder: (context,i){
                     return ListTile(
-                           leading  : Icon(EvilIcons.check,color:primaryColor),
+                           
+                           leading  : !listproductos[i].sincronizado
+                                      ? Icon(EvilIcons.check,color:primaryColor)
+                                      : SizedBox(
+                                        height: 20,
+                                        width:  20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation(
+                                            primaryColor
+                                          ),
+                                        ),
+                                      ),
                            title    : Text(listproductos[i].productoNombre),
                            subtitle : Text(listproductos[i].codigo),
-                           trailing :  Text(
+                           trailing : Text(
+                                       //listproductos[i].id,
                                        formatoMoney(listproductos[i].precio),
                                        style: TextStyle(fontWeight: FontWeight.bold)
                                       ),

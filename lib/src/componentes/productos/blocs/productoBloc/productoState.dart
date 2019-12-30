@@ -8,7 +8,8 @@ class ProductosState extends Equatable{
 
 
 class LoadingProductos extends ProductosState{}
-class UploadedProductos extends ProductosState{}
+
+
 
 class LoadedProductos  extends ProductosState{
   final List<Producto> productos;
@@ -16,3 +17,4 @@ class LoadedProductos  extends ProductosState{
   List<Object> get props => [productos];  
 
 }
+class UploadFireBaseProductos  extends ProductosState{}

@@ -20,22 +20,26 @@ Stream<DocumentReference> setPedido(Pedido pedido) {
 
 List productos = pedido.productos.map((producto){
 return {
- "productoNombre":producto.productoNombre,
- "codigo":producto.codigo,
- "cantidad":producto.cantidad,
- "select":producto.select,
- "precio":producto.precio
+ "productoNombre": producto.productoNombre,
+ "codigo"        : producto.codigo,
+ "cantidad"      : producto.cantidad,
+ "select"        : producto.select,
+ "precio"        : producto.precio
 };
 }).toList();
 
+Map cliente = {
+"nombre"    : pedido.cliente.nombre,
+"cedula"    : pedido.cliente.cedula,
+"direccion" : pedido.cliente.direcion
+};
+
 return Firestore.instance.collection('panchita/001/pedidos').add({
 
-"cedula":pedido.cedula,
-"nombreCliente":pedido.nombreCliente,
-"direccion":pedido.direcion,
-"productos": productos,
-"fecha":DateTime.now(),
-"total":pedido.total
+"cliente"   : cliente,
+"productos" : productos,
+"fecha"     : DateTime.now(),
+"total"     : pedido.total
 
 }).asStream();
 
