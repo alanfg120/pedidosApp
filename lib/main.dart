@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesEvent.dart';
@@ -26,20 +27,11 @@ import 'package:pedidos/src/rutas.dart';
 void main() async {
  WidgetsFlutterBinding.ensureInitialized();
 // ---- Shared Preferences -----
-
  final prefs = new PreferenciasUsuario();
  await prefs.initPrefs();
  
-// ---- Hive Db ----------------
- /* final path = await getApplicationDocumentsDirectory();
- Hive.init(path.path);
- Hive.registerAdapter(PedidoAdapter(), 0);
- Hive.registerAdapter(ProductoAdapter(),1);
- Hive.registerAdapter(ClienteAdapter(),2); */
  BlocSupervisor.delegate = SimpleBlocDelegate();
-
- /* var box =await Hive.openBox('pedidos');
- box.clear(); */
+ //debugPaintSizeEnabled=true;
  runApp(MyApp());
 }
 
@@ -53,11 +45,11 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider (
           providers: [
-                      BlocProvider<PedidosBloc>(
-                      create: (context) => PedidosBloc(repo: repoPedidos)..add(LoadPedidos()),
-                      ),
                       BlocProvider<FormPedidosBloc>(
                       create: (context) => FormPedidosBloc(repo: repoPedidos)..add(GetProducto())..add(GetCliente()),
+                      ),
+                      BlocProvider<PedidosBloc>(
+                      create: (context) => PedidosBloc(repo: repoPedidos)..add(LoadPedidos()),
                       ),
                       BlocProvider<ProductosBloc>(
                       create: (context) => ProductosBloc(repo: repoProductos)..add(LoadProductos()),

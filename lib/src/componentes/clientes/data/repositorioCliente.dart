@@ -1,30 +1,28 @@
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
+import 'package:pedidos/src/plugins/fireBase.dart';
 
+class ClientesRepositorio {
+  final String colletion = 'panchita/001/clientes';
 
-class ClientesRepositorio  {
+  Future<List<Cliente>> getClientes() async {
   
-Future<List<Cliente>> getClientes() async { 
-       List<Cliente> clientes=[]; 
-       //clientes = await getDataBox<Cliente>('pedidos');
-       final documentos = await Firestore.instance.collection('panchita/001/clientes').getDocuments();
-       clientes = documentos.documents.map((d)=>Cliente.map(d)).toList();
-       return clientes;
-}
+    final documentos = await getDocument(colletion,'');
+    return documentos.documents.map((d) => Cliente.map(d)).toList();
 
-
-Stream<DocumentReference> setCliente(Cliente cliente){
-   
-return Firestore.instance.collection('panchita/001/clientes').add({
-"nombre"    : cliente.nombre,
-"cedula"    : cliente.cedula,
-"direccion" : cliente.direcion,
-"select"    : cliente.select
-}).asStream();
-
-}
-       
+  }
+  Stream setCliente(Cliente cliente) => addDocument(colletion, cliente.id, {
+        "nombre"    : cliente.nombre,
+        "cedula"    : cliente.cedula,
+        "direccion" : cliente.direcion,
+        "select"    : cliente.select
+      });
+  Stream updateCliente(Cliente cliente) => updateDocument(colletion, cliente.id, {
+        "nombre"    : cliente.nombre,
+        "cedula"    : cliente.cedula,
+        "direccion" : cliente.direcion,
+        "select"    : cliente.select
+      });
 
 
 }

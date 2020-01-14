@@ -43,7 +43,12 @@ class _FormProductosState extends State<FormProductos> {
                              
                              key    : _scafold,
                              appBar : AppBar(
-                                      title: Text(
+                                      title: state.updateProducto 
+                                             ?Text(
+                                             "Actulizar Producto",  
+                                              style: TextStyle(color: primaryColor)
+                                              )
+                                             :Text(
                                              "Agregar Producto",  
                                               style: TextStyle(color: primaryColor)
                                               ),
@@ -67,15 +72,13 @@ class _FormProductosState extends State<FormProductos> {
                                                                ),
                                                                child   : Column(
                                                                          children: <Widget>[
-                                                                                    input("Codigo", _fococodigo, Icon(Ionicons.ios_barcode,color: primaryColor,), state.producto),
+                                                                                    input("Codigo", _fococodigo, Icon(Ionicons.ios_barcode,color: primaryColor), state.producto,state.updateProducto),
                                                                                     SizedBox(height: 20),
-                                                                                    input("Nombre", _foconombre, Icon(MaterialCommunityIcons.bottle_wine,color: primaryColor,), state.producto),
+                                                                                    input("Nombre", _foconombre, Icon(MaterialCommunityIcons.bottle_wine,color: primaryColor,), state.producto,false),
                                                                                     SizedBox(height: 20),
-                                                                                    input("Precio", _focoprecio, Icon(FontAwesome5.money_bill_alt,color: primaryColor,), state.producto),
+                                                                                    input("Precio", _focoprecio, Icon(FontAwesome5.money_bill_alt,color: primaryColor,), state.producto,false),
                                                                                     SizedBox(height: 20),
-                                                                                   
-                                                                                 
-                                                                                 ],
+                                                                                   ],
                                                                           ),
                                                       ),
                                               ),
@@ -89,12 +92,13 @@ class _FormProductosState extends State<FormProductos> {
     );
   }
 
-  Widget input(String text, FocusNode foco, Icon icono, Producto state) {
+  Widget input(String text, FocusNode foco, Icon icono, Producto state,bool update) {
 
          TextInputAction textinput;
          text == 'Precio'    ? textinput = TextInputAction.done 
                              : textinput = TextInputAction.next;
          return TextFormField(
+               readOnly        : update ,
                keyboardType    : text == 'Precio' ? TextInputType.number :null,
                validator       : (value) => value.isEmpty ? "Requerido": null,
                focusNode       : foco,
@@ -147,8 +151,8 @@ class _FormProductosState extends State<FormProductos> {
                 child     : Icon(Icons.check),
                 onPressed : () {
                                if (_productos.currentState.validate()){
-                                    formpedidoBloc.add(AddproductoForm(state.producto));
-                                    productoBloc.add(UpdateProductos(state.producto));
+                                    formpedidoBloc.add(AddproductoForm());
+                                    productoBloc.add(UpdateProductos(state.producto,state.updateProducto));
                                     fpedidobloc.add(UpdateProductoForm(state.producto));
                                     Navigator.pop(context);
                                }

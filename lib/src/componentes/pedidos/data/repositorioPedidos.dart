@@ -1,52 +1,55 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
 import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
-//import 'package:pedidos/src/plugins/getDataBox.dart';
-
-class PedidosRepositorio  {
-  
-Future<List<Pedido>> getPedidos() async { 
-       List<Pedido> pedidos=[]; 
-       //pedidos = await getDataBox<Pedido>('pedidos');
-       final documentos = await Firestore.instance.collection('panchita/001/pedidos').orderBy("fecha").getDocuments();
-       pedidos = documentos.documents.map((d){
-       return Pedido.map(d);
-       }).toList();
-       return pedidos;
-}
+import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
+import 'package:pedidos/src/plugins/fireBase.dart';
 
 
-Stream<DocumentReference> setPedido(Pedido pedido) {
+class PedidosRepositorio {
+  final String colletion = 'panchita/001/pedidos';
 
-List productos = pedido.productos.map((producto){
-return {
- "productoNombre": producto.productoNombre,
- "codigo"        : producto.codigo,
- "cantidad"      : producto.cantidad,
- "select"        : producto.select,
- "precio"        : producto.precio
-};
-}).toList();
+  Future<List<Pedido>> getPedidos() async {
+    final documentos = await getDocument(colletion, 'fecha');
+    return documentos.documents.map((d) => Pedido.map(d)).toList();
+  }
 
-Map cliente = {
-"nombre"    : pedido.cliente.nombre,
-"cedula"    : pedido.cliente.cedula,
-"direccion" : pedido.cliente.direcion
-};
+  Stream setPedido(Pedido pedido) {
+    
+    List productos = _mapProductos(pedido.productos);
+    Map cliente = _mapCliente(pedido.cliente);
+    return addDocument(colletion, pedido.id, {
+      "cliente"   : cliente,
+      "productos" : productos,
+      "fecha"     : DateTime.now(),
+      "total"     : pedido.total
+    });
+  }
 
-return Firestore.instance.collection('panchita/001/pedidos').add({
+  Stream updatePedido(Pedido pedido) {
 
-"cliente"   : cliente,
-"productos" : productos,
-"fecha"     : DateTime.now(),
-"total"     : pedido.total
+    List productos = _mapProductos(pedido.productos);
+    Map cliente = _mapCliente(pedido.cliente);
+    return updateDocument(colletion, pedido.id, {
+      "cliente"   : cliente,
+      "productos" : productos,
+      "fecha"     : pedido.fecha,
+      "total"     : pedido.total
+    });
+  }
 
-}).asStream();
+  List _mapProductos(List<Producto> productos) {
+   return productos.map((producto) => {
+              "productoNombre" : producto.productoNombre,
+              "codigo"         : producto.codigo,
+              "cantidad"       : producto.cantidad,
+              "select"         : producto.select,
+              "precio"         : producto.precio
+            })
+        .toList();
+  }
 
- 
-
-}
-       
-
-
+  Map _mapCliente(Cliente cliente) => {
+        "nombre"    : cliente.nombre,
+        "cedula"    : cliente.cedula,
+        "direccion" : cliente.direcion
+      };
 }

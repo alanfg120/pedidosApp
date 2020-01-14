@@ -3,14 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
-import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 import 'package:pedidos/src/plugins/formato.dart';
 
@@ -31,6 +29,7 @@ class _FormPedidosState extends State<FormPedidos> {
   final _clientecontroller   = TextEditingController();
   final _cedulacontroller    = TextEditingController();
   final _direccioncontroller = TextEditingController();
+  final _cantidadcontroller  = TextEditingController();
 
   PedidosRepositorio repo = PedidosRepositorio();
   Color  primaryColor     = Colors.teal;
@@ -51,7 +50,9 @@ class _FormPedidosState extends State<FormPedidos> {
            return Scaffold(
                   key    : _scafold,
                   appBar : AppBar(
-                           title     : Text("Agregar Pedido"),
+                           title     : state.update 
+                                       ? Text("Actualizar Pedido")
+                                       : Text("Agregar Pedido"),
                            iconTheme : IconThemeData(color: primaryColor),
                            actions: <Widget>[
                                                 Padding(
@@ -76,7 +77,7 @@ class _FormPedidosState extends State<FormPedidos> {
                                                                           "Cliente", 
                                                                           _fococliente,
                                                                           Icon(FontAwesome5.user,color:primaryColor),
-                                                                          state.pedido,
+                                                                          state,
                                                                           _clientecontroller,
                                                                           formpedidoBloc
                                                                           ),
@@ -85,14 +86,14 @@ class _FormPedidosState extends State<FormPedidos> {
                                                                           "Cedula",
                                                                           _fococedula,
                                                                           Icon(MaterialCommunityIcons.id_card,color:primaryColor),
-                                                                          state.pedido,_cedulacontroller
+                                                                          state,_cedulacontroller
                                                                           ),
                                                                           SizedBox(height: 20),
                                                                           input(
                                                                           "Direccion",
                                                                           _focodirecion,
                                                                           Icon(MaterialCommunityIcons.home_outline,color:primaryColor),
-                                                                          state.pedido,_direccioncontroller
+                                                                          state,_direccioncontroller
                                                                           ),
                                                                           SizedBox(height: 20),
                                                                           Text("Productos",style:TextStyle(fontSize: 18)),
@@ -127,26 +128,27 @@ class _FormPedidosState extends State<FormPedidos> {
     );
   }
 
-  Widget input(String text,FocusNode foco,Icon icono,Pedido state,controller,[bloc]) {
+  Widget input(String text,FocusNode foco,Icon icono,FormPedidoState state,controller,[bloc]) {
          
          TextInputAction textinput;
          text == 'Direccion' ? textinput = TextInputAction.newline 
                              : textinput = TextInputAction.next;
          return TextFormField(
+                readOnly        : true,
                 controller      : controller,
                 validator       : (value) => value.isEmpty ? "Requerido": null,
                 focusNode       : foco,
                 textInputAction : textinput,
-                decoration      : inputDecorador(icono, text,bloc),
+                decoration      : inputDecorador(icono, text,bloc,state),
                 style           : TextStyle(color: primaryColor),
                 cursorColor     : primaryColor,
                 onChanged       : (value){
                                            switch (text) {
-                                                   case "Cliente"   : state.cliente.nombre = value;
+                                                   case "Cliente"   : state.pedido.cliente.nombre = value;
                                                                       break;
-                                                   case "Cedula"    : state.cliente.cedula = value; 
+                                                   case "Cedula"    : state.pedido.cliente.cedula = value; 
                                                                       break;
-                                                   case "Direccion" : state.cliente.direcion = value;
+                                                   case "Direccion" : state.pedido.cliente.direcion = value;
                                                                       break;
                                                    default          : break;
                                            }
@@ -179,7 +181,8 @@ class _FormPedidosState extends State<FormPedidos> {
                                                                        color   : Colors.red,
                                                                        icon    : Icons.delete,
                                                                        onTap:  ()=> setState((){
-                                                                                    formpedidoBloc.add(DeleteProductoForm(i));
+                                                                                    formpedidoBloc.add(DeleteProductoForm(producto[i].id,i));
+                                                                                  
                                                                                    })
                                                                        )
                                                                        ],
@@ -237,17 +240,20 @@ class _FormPedidosState extends State<FormPedidos> {
                 child     : Icon(Icons.check),
                 onPressed : () {
                                 if (_pedidos.currentState.validate()){
-                                      formpedidoBloc.add(ResetProducto());
-                                      formpedidoBloc.add(AddPedido(state.pedido));
-                                      pedidoBloc.add(UpdatePedidos(state.pedido));
-                                      clienteBloc.add(UpdateClientes(state.pedido.cliente));
-                                      Navigator.pop(context);
+                                      pedidoBloc.add(UpdatePedidos(state.pedido,state.update));
+                                     //formpedidoBloc.add(ResetProducto());
+                                     // formpedidoBloc.add(AddPedido());
+                                     if(state.update){
+                                        Navigator.pushReplacementNamed(context, 'home');
+                                      } 
+                                      else Navigator.pop(context);
+                                      
                                 }
                               },
          );
   } 
   
-  InputDecoration inputDecorador(icono,text,bloc){
+  InputDecoration inputDecorador(icono,text,bloc, FormPedidoState state){
      return InputDecoration(
             hintStyle      : TextStyle(color: primaryColor),
             icon           : icono,
@@ -256,11 +262,13 @@ class _FormPedidosState extends State<FormPedidos> {
             hintText       : text,
             suffixIcon     : text == 'Cliente'  
                                       ? IconButton(
-                                        icon      : Icon(MaterialCommunityIcons.account_plus),
+                                        icon      :  !state.update ?
+                                                     Icon(MaterialCommunityIcons.account_plus) :
+                                                     Icon(MaterialCommunityIcons.account_edit) ,
                                         onPressed : (){
-                                                       Navigator.pushNamed(context,'addcliente');
-                                                       bloc.add(SearchEvent("",'clientes'));
-                                                     }
+                                                        Navigator.pushNamed(context,'addcliente');
+                                                        bloc.add(SearchEvent("",'clientes'));
+                                                      }
                                         )
                                       : null,
             
@@ -272,13 +280,19 @@ class _FormPedidosState extends State<FormPedidos> {
   showDialog(
   context: context,
   builder: (context){
+             _cantidadcontroller.text = producto[i].cantidad.toString();
+             _cantidadcontroller.selection = TextSelection(
+                                             baseOffset:0, 
+                                             extentOffset:_cantidadcontroller.text.length
+                                             );
             return AlertDialog(
                    title   : Text("Cantidad"),
                    content : Container(
                              child: TextFormField(
+                              
                                     autofocus    : true,
                                     keyboardType : TextInputType.number,
-                                    initialValue : producto[i].cantidad.toString(),
+                                    controller   : _cantidadcontroller,
                                     onChanged    : (value){producto[i].cantidad = int.parse(value);},
                                     textAlign    : TextAlign.center,
                                     decoration   : InputDecoration(border: InputBorder.none,contentPadding:EdgeInsets.all(20)),

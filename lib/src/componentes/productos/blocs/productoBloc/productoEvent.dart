@@ -20,11 +20,12 @@ class UploadProductos extends ProductosEvent {
 }
 
 class UpdateProductos extends ProductosEvent {
+  final bool update;
   final Producto producto;
-  UpdateProductos(this.producto);
+  UpdateProductos(this.producto,this.update);
   @override
-  List<Object> get props => [producto];
+  List<Object> get props => [producto,update];
   @override
-  String toString() => 'Actulizando Productos ....';
+  String toString() => 'Actulizando lista de Productos ....';
 }
 

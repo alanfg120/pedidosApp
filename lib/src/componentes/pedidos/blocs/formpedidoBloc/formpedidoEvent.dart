@@ -9,7 +9,7 @@ class FormPedidoEvent extends Equatable {
   List<Object> get props => [];
 }
 
-//
+
 class AddProducto extends FormPedidoEvent {
   final Producto producto;
   AddProducto({this.producto});
@@ -29,12 +29,8 @@ class AddCliente extends FormPedidoEvent {
 }
 
 class AddPedido extends FormPedidoEvent {
-  final Pedido pedido;
-  AddPedido(this.pedido);
-  @override
-  List<Object> get props => [pedido];
-  @override
-  String toString() => "Agregando Pedido a la lista..";
+   @override
+   String toString() => "Agregando Pedido a la lista..";
 }
 
 class SearchEvent extends FormPedidoEvent {
@@ -81,9 +77,18 @@ class UpdateClienteForm extends FormPedidoEvent {
 }
 
 class DeleteProductoForm extends FormPedidoEvent {
-  final int index;
-  DeleteProductoForm(this.index);
+  final String id;
+  final int    index;
+  DeleteProductoForm(this.id,this.index);
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id,index];
   String toString() => 'Borrando Producto en Pedidos....';
+}
+
+class UpdatePedidoForm extends FormPedidoEvent {
+  final Pedido pedido;
+  UpdatePedidoForm(this.pedido);
+  @override
+  List<Object> get props => [pedido];
+  String toString() => 'Actulizando Pedido ....';
 }

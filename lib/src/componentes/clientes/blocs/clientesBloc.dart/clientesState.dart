@@ -7,7 +7,7 @@ class ClientesState extends Equatable{
 
 
 class LoadingClientes extends ClientesState{}
-class UploadedClientes extends ClientesState{}
+
 
 class LoadedClientes  extends ClientesState{
   final List<Cliente> clientes;
@@ -15,3 +15,5 @@ class LoadedClientes  extends ClientesState{
   List<Object> get props => [clientes];  
 
 }
+
+class UploadFireBaseClientes extends ClientesState{}

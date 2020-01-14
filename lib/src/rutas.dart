@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pedidos/src/componentes/clientes/vistas/formClientes.dart';
 import 'package:pedidos/src/componentes/login/loginPage.dart';
 import 'package:pedidos/src/componentes/pedidos/vistas/addclientePage.dart';
+import 'package:pedidos/src/componentes/pedidos/vistas/detallesPage.dart';
 import 'package:pedidos/src/componentes/pedidos/vistas/formPedidos.dart';
 import 'package:pedidos/src/componentes/productos/vistas/formProductos.dart';
 import 'componentes/home/homePage.dart';
@@ -18,7 +19,8 @@ Map<String, WidgetBuilder> route() {
     'formproducto'    : (context) => FormProductos(),
     'addproducto'     : (context) => AddProductoPage(),
     'formcliente'     : (context) => FormCliente(),
-    'addcliente'     : (context) => AddClientePage(),
+    'addcliente'      : (context) => AddClientePage(),
+    'detallepedido'   : (context) => DetallesPedidoPage()
     
     
   };

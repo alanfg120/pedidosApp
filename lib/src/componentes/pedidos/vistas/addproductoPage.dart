@@ -39,7 +39,12 @@ class _AddProductoPageState extends State<AddProductoPage> {
                                    onChanged  : (value){
                                                   formpedidoBloc.add(SearchEvent(value,'productos'));
                                                 },
+                                   onEditingComplete: (){
+                                     Navigator.pop(context);
+                                   }, 
+                                            
                                    ),
+                                   
                       actions   : <Widget>[
                                   IconButton(
                                   icon      : Icon(Icons.cancel,color: Colors.grey,),
@@ -94,6 +99,7 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
         return ListView.builder(
                itemCount   : productos.length,
                itemBuilder : (context,i){
+                              
                               return  ListTile(
                                       title    : Text(productos[i].productoNombre),
                                       subtitle : Text(formatoMoney(productos[i].precio)),
@@ -104,7 +110,7 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
                                                                        productos[i].select = value;
                                                                        if(value)
                                                                        bloc.add(AddProducto(producto:productos[i]));
-                                                                       else bloc.add(DeleteProductoForm(i));
+                                                                       //else bloc.add(DeleteProductoForm(productos[i].id,i));
                                                                      }); 
                                                  },
                                                ),

@@ -4,6 +4,7 @@ import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/cliente
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesState.dart';
 import 'package:pedidos/src/componentes/clientes/data/repositorioCliente.dart';
 import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
+import 'package:pedidos/src/plugins/uid.dart';
 
 class ClientesBloc extends Bloc<ClientesEvent, ClientesState> {
   ClientesRepositorio repo;
@@ -14,48 +15,44 @@ class ClientesBloc extends Bloc<ClientesEvent, ClientesState> {
 
   @override
   Stream<ClientesState> mapEventToState(ClientesEvent event) async* {
-    if (event is LoadClientes) yield* _mapLoadClientesEvent();
-    if (event is UpdateClientes) yield* _mapUpdateClientesEvent(event, state);
-    if (event is UploadClientes) yield* _mapUploadClientesEvent();
+    if (event is LoadClientes) yield* _loadClientes();
+    if (event is UpdateClientes) yield* _updateClientes(event, state);
     if (event is UploadClienteFireBase)
-      yield* _mapUploadClienteFireBaseEvent(event, state);
+      yield* _uploadClientesFirebase(event, state);
   }
 
-  Stream<ClientesState> _mapLoadClientesEvent() async* {
+  Stream<ClientesState> _loadClientes() async* {
     final List<Cliente> clientes = await repo.getClientes();
     yield LoadedClientes(clientes);
   }
 
-  Stream<ClientesState> _mapUpdateClientesEvent(
+  Stream<ClientesState> _updateClientes(
       UpdateClientes event, LoadedClientes state) async* {
-    bool exist = false;
-    state.clientes.forEach((p) {
-      if (p.cedula == event.cliente.cedula) {
-        exist = true;
-      }
-    });
-    if (!exist) {
-      
-      state.clientes.add(event.cliente);
-      repo.setCliente(event.cliente).listen((data) {
+    if (event.update) {
+      repo.updateCliente(event.cliente).listen((data) {
         add(UploadClienteFireBase(event.cliente.cedula));
       });
+    } else {
+      bool exist = false;
+      state.clientes.forEach(
+          (p) => p.cedula == event.cliente.cedula ? exist = true : null);
+      if (!exist) {
+        event.cliente.id = createUid();
+        state.clientes.add(event.cliente);
+        repo.setCliente(event.cliente).listen((data) {
+          add(UploadClienteFireBase(event.cliente.cedula));
+        });
+      }
     }
-
     yield LoadedClientes(state.clientes);
   }
 
-  Stream<ClientesState> _mapUploadClientesEvent() async* {
-    yield UploadedClientes();
-  }
-
-  Stream<ClientesState> _mapUploadClienteFireBaseEvent(
+  Stream<ClientesState> _uploadClientesFirebase(
       UploadClienteFireBase event, LoadedClientes state) async* {
-         state.clientes.forEach((c){
-           if(c.cedula==event.cedula )
-             c.sincronizado = false;
-         });
-         yield LoadingClientes();
-         yield LoadedClientes(state.clientes);
-      }
+    state.clientes.forEach((c) {
+      if (c.cedula == event.cedula) c.sincronizado = false;
+    });
+    yield UploadFireBaseClientes();
+    yield LoadedClientes(state.clientes);
+  }
 }

@@ -7,9 +7,15 @@ class FormProductoEvent extends Equatable {
 }
 
 class AddproductoForm extends FormProductoEvent {
+
+  @override
+  List<Object> get props => [];
+  String toString() => 'Reset Formulario Producto....';
+}
+class UpdateproductoForm extends FormProductoEvent {
   final Producto producto;
-  AddproductoForm(this.producto);
+  UpdateproductoForm(this.producto);
   @override
   List<Object> get props => [producto];
-  String toString() => 'Reset Formulario Producto....';
+  String toString() => 'Actulizando  Producto....';
 }

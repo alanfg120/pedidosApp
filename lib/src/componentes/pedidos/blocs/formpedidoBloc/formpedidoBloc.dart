@@ -4,15 +4,16 @@ import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
+import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
 import 'package:pedidos/src/componentes/productos/data/repositorioProductos.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 
 class FormPedidosBloc extends Bloc<FormPedidoEvent, FormPedidoState> {
   PedidosRepositorio repo;
-
   ProductosRepocitorio repoProducto = ProductosRepocitorio();
   ClientesRepositorio repoCliente = ClientesRepositorio();
 
+  List<Pedido> initialPedidos;
   List<Cliente> initialClientes;
   List<Producto> initialProductos;
   FormPedidosBloc({this.repo});
@@ -22,25 +23,34 @@ class FormPedidosBloc extends Bloc<FormPedidoEvent, FormPedidoState> {
 
   @override
   Stream<FormPedidoState> mapEventToState(FormPedidoEvent event) async* {
-    if (event is AddPedido)          yield* _mapAddpedidoState(event);
-    if (event is AddProducto)        yield* _mapAddproductoState(event);
-    if (event is AddCliente)         yield* _mapAddClienteState(event);
-    if (event is SearchEvent)        yield* _mapSearchEventState(event);
-    if (event is GetProducto)        yield* _mapGetProductoState();
-    if (event is GetCliente)         yield* _mapetClienteState();
+    if (event is AddPedido) yield* _mapAddpedidoState();
+    if (event is AddProducto) yield* _mapAddproductoState(event);
+    if (event is AddCliente) yield* _mapAddClienteState(event);
+    if (event is SearchEvent) yield* _mapSearchEventState(event);
+    if (event is GetProducto) yield* _mapGetProductoState();
+    if (event is GetCliente) yield* _mapetClienteState();
     if (event is UpdateProductoForm) yield* _mapUpdateProductoFormstate(event);
-    if (event is UpdateClienteForm)  yield* _mapUpdateClienteFormState(event);
-    if (event is ResetProducto)      yield* _mapResetProductostate();
+    if (event is UpdateClienteForm) yield* _mapUpdateClienteFormState(event);
+    if (event is ResetProducto) yield* _mapResetProductostate();
     if (event is DeleteProductoForm) yield* _mapDeleteProductoFormstate(event);
+    if (event is UpdatePedidoForm) yield* _mapUpdatePedidoFormState(event);
   }
 
-  Stream<FormPedidoState> _mapAddpedidoState(AddPedido event) async* {
+  Stream<FormPedidoState> _mapAddpedidoState() async* {
     yield state.copyWith(
-        pedido: initialState.pedido, query: '', productos: state.productos);
+        pedido: initialState.pedido,
+        query: '',
+        productos: state.productos,
+        update: false);
   }
 
   Stream<FormPedidoState> _mapAddproductoState(AddProducto event) async* {
-    state.pedido.productos.add(event.producto);
+
+    bool exits = false;
+    state.pedido.productos.forEach((p) {
+      if (p.codigo == event.producto.codigo) exits = true;
+    });
+    if (!exits) state.pedido.productos.add(event.producto);
     yield state.copyWith(
         pedido: state.pedido, query: state.query, productos: state.productos);
   }
@@ -124,11 +134,11 @@ class FormPedidosBloc extends Bloc<FormPedidoEvent, FormPedidoState> {
 
   Stream<FormPedidoState> _mapDeleteProductoFormstate(
       DeleteProductoForm event) async* {
-    final indexProducto =
-        state.productos.indexOf(state.pedido.productos[event.index]);
-    state.productos[indexProducto].select = false;
+    state.productos.forEach((p) {
+      if (p.id == event.id) p.select = false;
+    });
     state.pedido.productos.removeAt(event.index);
-    add(ResetProducto());
+    //add(ResetProducto());
     yield state.copyWith(
         pedido: state.pedido, query: '', productos: state.productos);
   }
@@ -161,6 +171,16 @@ class FormPedidosBloc extends Bloc<FormPedidoEvent, FormPedidoState> {
     yield state.copyWith(
         pedido: state.pedido,
         query: '',
+        productos: state.productos,
+        clientes: state.clientes);
+  }
+
+  Stream<FormPedidoState> _mapUpdatePedidoFormState(
+      UpdatePedidoForm event) async* {
+    yield state.copyWith(
+        query: '',
+        pedido: event.pedido,
+        update: true,
         productos: state.productos,
         clientes: state.clientes);
   }

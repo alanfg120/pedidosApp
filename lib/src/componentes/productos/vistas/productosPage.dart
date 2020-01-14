@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoBloc.dart';
+import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoEvent.dart';
 import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoBloc.dart';
 import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoState.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
@@ -78,34 +81,47 @@ class _ProductosPageState extends State<ProductosPage> {
   Widget listaProductos(List<Producto>producto) {
     
     final listproductos = producto.reversed.toList();
-
+    if(producto.isEmpty) return Center(child: Text("No hay Productos Guardados"));
     return ListView.separated(
        
       separatorBuilder: (context,i)=>Divider(height: 1),
       itemCount: producto.length,
       itemBuilder: (context,i){
-                    return ListTile(
-                           
-                           leading  : !listproductos[i].sincronizado
-                                      ? Icon(EvilIcons.check,color:primaryColor)
-                                      : SizedBox(
-                                        height: 20,
-                                        width:  20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation(
-                                            primaryColor
-                                          ),
-                                        ),
-                                      ),
-                           title    : Text(listproductos[i].productoNombre),
-                           subtitle : Text(listproductos[i].codigo),
-                           trailing : Text(
-                                       //listproductos[i].id,
-                                       formatoMoney(listproductos[i].precio),
-                                       style: TextStyle(fontWeight: FontWeight.bold)
-                                      ),
-                   );
+                    return Slidable(
+                           secondaryActions: <Widget>[
+                                                IconSlideAction(
+                                                caption : 'Editar',
+                                                color   : primaryColor,
+                                                icon    : Icons.edit,
+                                                onTap:  ()=> setState((){
+                                                             BlocProvider.of<FormProductoBloc>(context).add(UpdateproductoForm(listproductos[i]));
+                                                             Navigator.pushNamed(context, 'formproducto');  
+                                                            })
+                                                )
+                                                ],
+                           actionPane : SlidableDrawerActionPane(),
+                           child: ListTile(
+                                    leading  : !listproductos[i].sincronizado
+                                               ? Icon(EvilIcons.check,color:primaryColor)
+                                               : SizedBox(
+                                                 height: 20,
+                                                 width:  20,
+                                                 child: CircularProgressIndicator(
+                                                   strokeWidth: 2,
+                                                   valueColor: AlwaysStoppedAnimation(
+                                                     primaryColor
+                                                   ),
+                                                 ),
+                                               ),
+                                    title    : Text(listproductos[i].productoNombre),
+                                    subtitle : Text(listproductos[i].codigo),
+                                    trailing : Text(
+                                                //listproductos[i].id,
+                                                formatoMoney(listproductos[i].precio),
+                                                style: TextStyle(fontWeight: FontWeight.bold)
+                                               ),
+                          ),
+                    );
       },
     );
   }

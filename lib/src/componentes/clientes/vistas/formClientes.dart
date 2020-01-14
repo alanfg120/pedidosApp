@@ -159,9 +159,9 @@ class _FormClienteState extends State<FormCliente> {
                 child     : Icon(Icons.check),
                 onPressed : () {
                                if (_clientes.currentState.validate()){
-                                    formclienteBloc.add(AddclienteForm(state.cliente));
+                                    formclienteBloc.add(AddclienteForm());
                                     formpedidoBloc.add(UpdateClienteForm(state.cliente));
-                                    clientesBloc.add(UpdateClientes(state.cliente));
+                                    clientesBloc.add(UpdateClientes(state.cliente,state.updateCliente));
                                     Navigator.pop(context);
                                   }
                               },

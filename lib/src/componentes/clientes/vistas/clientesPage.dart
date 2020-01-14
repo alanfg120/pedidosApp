@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesState.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteEvent.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclientesBloc.dart';
 import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
 
 class ClientesPage extends StatefulWidget {
@@ -64,25 +67,39 @@ class _ClientesPageState extends State<ClientesPage> {
   }
 
   Widget listadeClientes(List<Cliente> clientes) {
-
+     if(clientes.isEmpty) return Center(child: Text("No hay Clientes Guardados"));
       return ListView.separated(
         separatorBuilder: (context,i)=>Divider(height: 1),
         itemCount: clientes.length,
         itemBuilder: (context,i){
-             return ListTile(
-               title    : Text("${clientes[i].nombre}"),
-               subtitle : Text("${clientes[i].direcion}"),
-               trailing : Text("${clientes[i].cedula}"), 
-               leading  : !clientes[i].sincronizado
-                          ? Icon(EvilIcons.check,color:primaryColor)
-                          : SizedBox(
-                            height : 20,
-                            width  : 20,
-                            child  : CircularProgressIndicator(
-                                     strokeWidth : 2,
-                                     valueColor  : AlwaysStoppedAnimation(primaryColor),
-                            ),
-             ),
+             return Slidable(
+                    secondaryActions: <Widget>[
+                                                IconSlideAction(
+                                                caption : 'Editar',
+                                                color   : primaryColor,
+                                                icon    : Icons.edit,
+                                                onTap:  ()=> setState((){
+                                                             BlocProvider.of<FormClienteBloc>(context).add(UpdateCliente(clientes[i]));
+                                                             Navigator.pushNamed(context, 'formcliente');  
+                                                            })
+                                                )
+                                                ],
+                    actionPane : SlidableDrawerActionPane(),
+                    child: ListTile(
+                           title    : Text("${clientes[i].nombre}"),
+                           subtitle : Text("${clientes[i].direcion}"),
+                           trailing : Text("${clientes[i].cedula}"), 
+                           leading  : !clientes[i].sincronizado
+                                      ? Icon(EvilIcons.check,color:primaryColor)
+                                      : SizedBox(
+                                        height : 20,
+                                        width  : 20,
+                                        child  : CircularProgressIndicator(
+                                                 strokeWidth : 2,
+                                                 valueColor  : AlwaysStoppedAnimation(primaryColor),
+                                        ),
+                         ),
+                         ),
              );
 
         },
