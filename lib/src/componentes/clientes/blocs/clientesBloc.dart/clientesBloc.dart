@@ -19,6 +19,7 @@ class ClientesBloc extends Bloc<ClientesEvent, ClientesState> {
     if (event is UpdateClientes) yield* _updateClientes(event, state);
     if (event is UploadClienteFireBase)
       yield* _uploadClientesFirebase(event, state);
+    if(event is SearchClientesEvent) yield* _searchClientes(event);
   }
 
   Stream<ClientesState> _loadClientes() async* {
@@ -54,5 +55,20 @@ class ClientesBloc extends Bloc<ClientesEvent, ClientesState> {
     });
     yield UploadFireBaseClientes();
     yield LoadedClientes(state.clientes);
+  }
+
+  Stream<ClientesState> _searchClientes(SearchClientesEvent event) async* {
+  
+    if (event.query.isEmpty) {
+      yield LoadedClientes([]);
+    } else {
+      final listaSugerida = event.clientes
+          .where((p) => p.nombre
+              .toLowerCase()
+              .startsWith(event.query.toLowerCase()))
+          .toList();
+      yield LoadedClientes(listaSugerida);
+    }
+
   }
 }

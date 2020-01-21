@@ -33,4 +33,13 @@ class  UploadClienteFireBase extends ClientesEvent{
   @override
   String toString() =>'Subiendo Cliente A firebase ....';
 }
+class SearchClientesEvent extends ClientesEvent{
+  final List<Cliente> clientes;
+  final String query;
+  SearchClientesEvent({this.query,this.clientes});
+    @override
+  List<Object> get props => [query,clientes];
+  @override
+  String toString() =>'Buscando Clientes....';
+}
 

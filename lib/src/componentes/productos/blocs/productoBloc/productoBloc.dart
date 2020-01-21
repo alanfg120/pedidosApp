@@ -18,6 +18,7 @@ class ProductosBloc extends Bloc<ProductosEvent, ProductosState> {
     if (event is LoadProductos) yield* _mapLoadedProductosEvent();
     if (event is UpdateProductos) yield* _mapUpdateProductosEvent(event, state);
     if (event is UploadProductos) yield* _mapUploadProductosEvent(event, state);
+    if (event is SearchProductoEvent) yield* _searchProducto(event);
   }
 
   Stream<ProductosState> _mapLoadedProductosEvent() async* {
@@ -56,5 +57,20 @@ class ProductosBloc extends Bloc<ProductosEvent, ProductosState> {
     });
     yield UploadFireBaseProductos();
     yield LoadedProductos(state.productos);
+  }
+
+  Stream<ProductosState> _searchProducto(SearchProductoEvent event) async* {
+
+     if (event.query.isEmpty) {
+      yield LoadedProductos([]);
+    } else {
+      final listaSugerida = event.productos
+          .where((p) => p.productoNombre
+              .toLowerCase()
+              .startsWith(event.query.toLowerCase()))
+          .toList();
+      yield LoadedProductos(listaSugerida);
+    }
+
   }
 }

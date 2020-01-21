@@ -39,3 +39,11 @@ class DetallesPedidoEvent extends PedidosEvent {
   @override
   String toString() => 'Detalle del Pedido ....';
 }
+ class SearchPedidoEvent  extends PedidosEvent{
+  final List<Pedido> pedidos;
+  final String query;
+  SearchPedidoEvent({this.query,this.pedidos});
+   List<Object> get props => [query,pedidos];
+  @override
+  String toString() => 'Buscar  el Pedido ....';
+ }

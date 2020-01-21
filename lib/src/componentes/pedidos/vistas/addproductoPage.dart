@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/productos/data/repositorioProductos.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 import 'package:pedidos/src/plugins/formato.dart';

@@ -28,4 +28,13 @@ class UpdateProductos extends ProductosEvent {
   @override
   String toString() => 'Actulizando lista de Productos ....';
 }
+class SearchProductoEvent extends ProductosEvent {
+  final String query;
+  final List<Producto> productos;
+  SearchProductoEvent(this.productos,this.query);
+  @override
+  List<Object> get props => [productos,query];
+  @override
+  String toString() => 'Buscando Producto ....';
+}
 

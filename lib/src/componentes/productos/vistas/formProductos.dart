@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoBloc.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoEvent.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoState.dart';
-import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoBloc.dart';
-import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoEvent.dart';
+import 'package:pedidos/src/componentes/productos/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 
 class FormProductos extends StatefulWidget {

@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoBloc.dart';
-import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoEvent.dart';
-import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoBloc.dart';
-import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoState.dart';
+import 'package:pedidos/src/componentes/productos/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
+import 'package:pedidos/src/componentes/productos/vistas/searchProductos.dart';
 import 'package:pedidos/src/plugins/formato.dart';
 
 
@@ -25,57 +23,65 @@ class _ProductosPageState extends State<ProductosPage> {
   @override
   Widget build(BuildContext context) {
      
-              return Scaffold(
-                           key:  scafold,
-                           appBar: AppBar(
-                                   centerTitle : false,
-                                   title       : Row(
-                                                 children: <Widget>[
-                                                    Icon(FontAwesome5.list_alt,size:32,color:primaryColor),
-                                                    SizedBox(width: 20),
-                                                    Text("Productos",style:TextStyle(color:primaryColor))
-                                                 ],
-                                   ),
-                                   actions : <Widget>[
-                                              IconButton(
-                                                icon      : Icon(
-                                                             EvilIcons.search,
-                                                             color : primaryColor,
-                                                             size  : 30.0,
-                                                            ),
-                                                onPressed : (){},
-                                              )
-                                  ],
-                           ),
-                           body: BlocListener<ProductosBloc,ProductosState>(
-                                 listener: (context,state){
-                                  
-                                 },
-                                 child: BlocBuilder<ProductosBloc,ProductosState>( 
-                                   builder: (context,state){
-
-                                     if(state is LoadingProductos)
-                                        return Center(child: CircularProgressIndicator());
-                                     if(state is LoadedProductos)
-                                        return Column(
-                                              children: <Widget>[
-                                                        ListTile(
-                                                        trailing : Text("Precio"),
-                                                        title    : Text("Nombre del Producto"),
-                                                        leading  : Icon(MaterialCommunityIcons.cloud_upload_outline),
-                                                        ),
-                                                        Expanded(
-                                                        child: listaProductos(state.productos)
-                                                        )
-                                              ],
-                                        );
-
-                                     //return listaProductos(state.productos);
-                                     return Container();
-                                   } 
+              return BlocBuilder<ProductosBloc,ProductosState>(
+                             builder: (context,state)=>
+                             Scaffold(
+                             key:  scafold,
+                             appBar: AppBar(
+                                     centerTitle : false,
+                                     title       : Row(
+                                                   children: <Widget>[
+                                                      Icon(FontAwesome5.list_alt,size:32,color:primaryColor),
+                                                      SizedBox(width: 20),
+                                                      Text("Productos",style:TextStyle(color:primaryColor))
+                                                   ],
+                                     ),
+                                     actions : <Widget>[
+                                                IconButton(
+                                                  icon      : Icon(
+                                                               EvilIcons.search,
+                                                               color : primaryColor,
+                                                               size  : 30.0,
+                                                              ),
+                                                  onPressed : (){
+                                                    if(state is LoadedProductos)
+                                                     Navigator.push(
+                                                             context, MaterialPageRoute(
+                                                                      builder: (context)=>SearchProductoPage(productos: state.productos))); 
+                                                  },
+                                                )
+                                    ],
                              ),
-                           )
-                    );
+                             body: BlocListener<ProductosBloc,ProductosState>(
+                                   listener: (context,state){
+                                    
+                                   },
+                                   child: BlocBuilder<ProductosBloc,ProductosState>( 
+                                     builder: (context,state){
+
+                                       if(state is LoadingProductos)
+                                          return Center(child: CircularProgressIndicator());
+                                       if(state is LoadedProductos)
+                                          return Column(
+                                                children: <Widget>[
+                                                          ListTile(
+                                                          trailing : Text("Precio"),
+                                                          title    : Text("Nombre del Producto"),
+                                                          leading  : Icon(MaterialCommunityIcons.cloud_upload_outline),
+                                                          ),
+                                                          Expanded(
+                                                          child: listaProductos(state.productos)
+                                                          )
+                                                ],
+                                          );
+
+                                       //return listaProductos(state.productos);
+                                       return Container();
+                                     } 
+                               ),
+                             )
+                      ),
+              );
           }
 
   Widget listaProductos(List<Producto>producto) {

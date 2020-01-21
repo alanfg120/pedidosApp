@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesState.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteEvent.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclientesBloc.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
+import 'package:pedidos/src/componentes/clientes/vistas/searchCliente.dart';
 
 class ClientesPage extends StatefulWidget {
   ClientesPage({Key key}) : super(key: key);
@@ -21,48 +19,58 @@ class _ClientesPageState extends State<ClientesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-       appBar: AppBar(
-                centerTitle : false,
-                title       : Row(
-                              children: <Widget>[
-                                Icon(FontAwesome5.user,size:30,color: primaryColor),
-                                SizedBox(width: 20),
-                                Text("Clientes",style:TextStyle(color: primaryColor))
-                              ],
-                ),
-                actions : <Widget>[
-                            IconButton(
-                              icon      : Icon(
-                                           EvilIcons.search,
-                                           color : primaryColor,
-                                           size  : 30.0,
-                                          ),
-                              onPressed : (){},
-                            )
-                ],
-       ),
-       body: BlocBuilder<ClientesBloc,ClientesState>(
-             builder: (context,state){
-                if(state is LoadingClientes)
-                return  CircularProgressIndicator();
-                if (state is LoadedClientes)
-                 return Column(
-                        children: <Widget>[
-                                  ListTile(
-                                  trailing : Text("Cedula"),
-                                  title    : Text("Nombre del Cliente"),
-                                  leading  : Icon(MaterialCommunityIcons.cloud_upload_outline),
-                                  ),
-                                  Expanded(
-                                  child: listadeClientes(state.clientes)
-                                  )
-                        ],
-                 );
-                return Container();
-             }
 
-       )
+
+    return BlocBuilder<ClientesBloc,ClientesState>(
+          builder:(context,state)=>
+          Scaffold(
+          appBar: AppBar(
+                  centerTitle : false,
+                  title       : Row(
+                                children: <Widget>[
+                                  Icon(FontAwesome5.user,size:30,color: primaryColor),
+                                  SizedBox(width: 20),
+                                  Text("Clientes",style:TextStyle(color: primaryColor))
+                                ],
+                  ),
+                  actions : <Widget>[
+                              IconButton(
+                                icon      : Icon(
+                                             EvilIcons.search,
+                                             color : primaryColor,
+                                             size  : 30.0,
+                                            ),
+                                onPressed : (){
+                                  if(state is LoadedClientes)
+                                  Navigator.push(
+                                  context, MaterialPageRoute(
+                                           builder: (context)=>SearchClientesPage(clientes:state.clientes))); 
+                                },
+                              )
+                  ],
+         ),
+         body: BlocBuilder<ClientesBloc,ClientesState>(
+               builder: (context,state){
+                  if(state is LoadingClientes)
+                  return  CircularProgressIndicator();
+                  if (state is LoadedClientes)
+                   return Column(
+                          children: <Widget>[
+                                    ListTile(
+                                    trailing : Text("Cedula"),
+                                    title    : Text("Nombre del Cliente"),
+                                    leading  : Icon(MaterialCommunityIcons.cloud_upload_outline),
+                                    ),
+                                    Expanded(
+                                    child: listadeClientes(state.clientes)
+                                    )
+                          ],
+                   );
+                  return Container();
+               }
+
+         )
+      ),
     );
   }
 

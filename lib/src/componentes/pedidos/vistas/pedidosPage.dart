@@ -10,6 +10,7 @@ import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.da
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosState.dart';
 import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
 import 'package:pedidos/src/componentes/pedidos/vistas/detallesPage.dart';
+import 'package:pedidos/src/componentes/pedidos/vistas/searchPedidos.dart';
 import 'package:pedidos/src/plugins/formato.dart';
 
 
@@ -32,50 +33,61 @@ class _PedidosPageState extends State<PedidosPage> {
       //ignore: close_sinks
   
     
-     return Scaffold(
-             appBar : AppBar(
-                     centerTitle : false,
-                     title       : Row(
-                                   children: <Widget>[
-                                             Icon(EvilIcons.cart,size: 40,color: primaryColor),
-                                             SizedBox(width: 20),
-                                             Text("Pedidos",style: TextStyle(color: primaryColor))
-                                             ],
-                     ),
-                     actions     : <Widget>[
-                                            IconButton(
-                                            onPressed : (){},
-                                            icon      : Icon(
-                                                        EvilIcons.search,
-                                                        color : primaryColor,
-                                                        size  : 30.0,
-                                                        )
-                                             )
-                                       ],
-                    elevation: 1,
-           ),
-           body   : BlocBuilder<PedidosBloc,PedidosState>(
-                    builder: (context,state){
-                               if(state is LoadingPedidos)
-                                 return Center(child: CircularProgressIndicator());
-                               if(state is LoadedPedidos){
-                                return Column(
-                                  children: <Widget>[
-                                    ListTile(
-                                    trailing: Text("Total Pedido"),
-                                    title: Text("Nombre del Cliente"),
-                                    leading: Icon(MaterialCommunityIcons.cloud_upload_outline),
-                                    ),
-                                    Expanded(
-                                    child: listaPedidos(state.pedidos)
-                                    )
-                                  ],
-                                );
-                                //return  listaPedidos(state.pedidos);
-                               }
-                                 return Container();
-                    },
-           ),
+     return BlocBuilder<PedidosBloc,PedidosState>(
+            builder:(context,state)=> 
+            Scaffold(
+               appBar : AppBar(
+                       centerTitle : false,
+                       title       : Row(
+                                     children: <Widget>[
+                                               Icon(EvilIcons.cart,size: 40,color: primaryColor),
+                                               SizedBox(width: 20),
+                                               Text("Pedidos",style: TextStyle(color: primaryColor))
+                                               ],
+                       ),
+                       actions     : <Widget>[
+                                              IconButton(
+                                              onPressed : (){
+                                                    
+                                                          if(state is LoadedPedidos) {
+                                                        
+                                                           Navigator.push(
+                                                           context, MaterialPageRoute(
+                                                                    builder: (context)=>SearchPedidosPage(pedidos:state.pedidos))); 
+                                                          } 
+                                                          },
+                                              icon      : Icon(
+                                                          EvilIcons.search,
+                                                          color : primaryColor,
+                                                          size  : 30.0,
+                                                          )
+                                               )
+                                         ],
+                      elevation: 1,
+             ),
+             body   : BlocBuilder<PedidosBloc,PedidosState>(
+                      builder: (context,state){
+                                 if(state is LoadingPedidos)
+                                   return Center(child: CircularProgressIndicator());
+                                 if(state is LoadedPedidos){
+                                  return Column(
+                                    children: <Widget>[
+                                      ListTile(
+                                      trailing: Text("Total Pedido"),
+                                      title: Text("Nombre del Cliente"),
+                                      leading: Icon(MaterialCommunityIcons.cloud_upload_outline),
+                                      ),
+                                      Expanded(
+                                      child: listaPedidos(state.pedidos)
+                                      )
+                                    ],
+                                  );
+                                  //return  listaPedidos(state.pedidos);
+                                 }
+                                   return Container();
+                      },
+             ),
+       ),
      );
   }
 

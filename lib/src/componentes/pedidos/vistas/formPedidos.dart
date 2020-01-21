@@ -3,12 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosEvent.dart';
-import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 import 'package:pedidos/src/plugins/formato.dart';
 
@@ -31,7 +26,6 @@ class _FormPedidosState extends State<FormPedidos> {
   final _direccioncontroller = TextEditingController();
   final _cantidadcontroller  = TextEditingController();
 
-  PedidosRepositorio repo = PedidosRepositorio();
   Color  primaryColor     = Colors.teal;
   
   @override
