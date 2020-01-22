@@ -4,7 +4,6 @@ import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
-import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
 import 'package:pedidos/src/componentes/productos/data/repositorioProductos.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 
@@ -13,7 +12,7 @@ class FormPedidosBloc extends Bloc<FormPedidoEvent, FormPedidoState> {
   ProductosRepocitorio repoProducto = ProductosRepocitorio();
   ClientesRepositorio repoCliente = ClientesRepositorio();
 
-  List<Pedido> initialPedidos;
+
   List<Cliente> initialClientes;
   List<Producto> initialProductos;
   FormPedidosBloc({this.repo});

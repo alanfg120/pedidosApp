@@ -294,6 +294,7 @@ class _FormPedidosState extends State<FormPedidos> {
                             ),
                    actions: <Widget>[
                                      RaisedButton(
+                                     color: primaryColor,
                                      textColor : Colors.white,
                                      onPressed : ()=>Navigator.pop(context),
                                      child     : Text("Aceptar"),
