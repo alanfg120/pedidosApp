@@ -5,6 +5,7 @@ import { PedidosRoutingModule } from './pedidos-routing.module';
 import { PedidosComponent } from './vistas/pedidos/pedidos.component';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
+import { MaterialModule } from '../material/material.module';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { environment } from 'src/environments/environment';
     CommonModule,
     PedidosRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
+    MaterialModule
   ]
 })
 export class PedidosModule { }

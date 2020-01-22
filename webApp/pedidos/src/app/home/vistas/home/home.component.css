@@ -1,0 +1,95 @@
+mat-toolbar {
+  height: 56px !important;
+  background-color: white !important;
+  box-shadow: -5px 10px 6px -6px rgb(0, 0, 0) !important;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.example-icon {
+  margin-right: 25px;
+  vertical-align: middle;
+  color: rgb(95, 99, 104);
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.contenedor {
+  height: calc(100vh - 56px);
+
+  box-sizing: border-box;
+   overflow: hidden;
+}
+.center {
+  padding: 3px;
+}
+
+.example-container {
+  width: 250px;
+  padding: 5px;
+  border-right: 1px solid #e0e0e0;
+
+}
+.mat-expansion-panel:not([class*="mat-elevation-z"]) {
+  box-shadow: none !important;
+}
+
+.menutittle {
+  margin-left: 30px;
+  color: #ff4545;
+  font-weight: 100;
+}
+
+.active {
+  color: red;
+}
+
+@media only screen and (min-width: 1300px) {
+  .contenedor {
+   
+  }
+
+  .notificaciones {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 3px;
+    display: grid;
+    grid-template-columns: 70px 1fr;
+  }
+  .iconnoti {
+    font-size: 32px;
+    align-self: center;
+    justify-self: center;
+  }
+}
+
+.iconpedidos {
+  color: teal;
+}
+
+.iconmenu {
+  font-size: 25px;
+  margin-right: 20px;
+  margin-left: 10px;
+}
+
+.iconproductos{
+  color:#ff4081;
+}
+.iconclientes{
+  color:#9c27b0 ;
+}
+
+mat-form-field.mat-form-field {
+  font-size: 11px;
+  
+}
+
+.search{
+  margin-top: 18px;
+  margin-left:200px;
+  display: grid;
+  grid-template-columns: 600px;
+
+
+}

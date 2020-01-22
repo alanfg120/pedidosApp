@@ -1,4 +1,52 @@
-<ul *ngFor="let item of pedidos | async ">
+<div class="contenido">
+  <div class="listado">
+    <!--   <div class="loading" *ngIf="isloading$ | async">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div> -->
+    <mat-card
+      class="example-card animated slideInDown"
+      *ngFor="let pedido of pedidos | async"
+      (click)="detalles(pedido, pedido.id)"
+    >
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image">
+          {{ pedido.cliente.nombre[0] | uppercase }}
+        </div>
+        <mat-card-title>{{ pedido.cliente.nombre }}</mat-card-title>
+        <mat-card-subtitle>{{
+          pedido.fecha.seconds * 1000 | date: "dd/MM/yyyy"
+        }}</mat-card-subtitle>
+      </mat-card-header>
 
-<li>{{item.nombreCliente}}</li>
-</ul>
+      <mat-card-content>
+        <div style="font-weight: 300;font-size: 0.9rem;">
+          Total: ${{ pedido.total }}
+        </div>
+      </mat-card-content>
+      
+    </mat-card>
+  </div>
+  <div class="opciones">
+    <div class="detallestitulo">
+      <mat-icon>error_outline</mat-icon>
+      <div style="margin-top: 3px; margin-right: 4px;">Detalles</div>
+    </div>
+    <div class="detallesheader">
+      <div></div>
+      <div>Codigo</div>
+      <div>Nombre</div>
+      <div>Cantidad</div>
+      <div>precio</div>
+    </div>
+    <div class="pedido">
+      <div class="listadoproductos" *ngFor="let producto of productos">
+        <mat-checkbox color="primary"></mat-checkbox>
+        <div>{{ producto.codigo }}</div>
+        <div>{{ producto.productoNombre }}</div>
+        <div>{{ producto.cantidad }}</div>
+        <div>$ {{ producto.precio }}</div>
+      </div>
+    <h1 style="position: fixed; bottom:0px;right: 0px; padding: 20px;">Total: {{total}}</h1>
+    </div>
+  </div>
+</div>

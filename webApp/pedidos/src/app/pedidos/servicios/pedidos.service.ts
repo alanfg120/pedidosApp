@@ -16,6 +16,7 @@ export class PedidosService {
       .valueChanges({ idField: "id" })
       .pipe(
         map((data: any) => data.reverse())
+
       );
   }
 }

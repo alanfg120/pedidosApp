@@ -1,0 +1,95 @@
+.titulo {
+  color: gray;
+  border-bottom: solid 1px #dddddd;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) 50px 50px;
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+}
+@media (max-width: 768px) {
+    .contenido {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+      }
+  }
+.opciones {
+ 
+  display: grid;
+  height: calc(100vh - 56px);
+  grid-template-columns: 1fr;
+  grid-template-rows: 70px 50px 60px;
+}
+
+.listado {
+  padding: 0.5rem;
+  height: calc(100vh - 56px);
+  border-right: solid 1px #dddddd;
+  overflow-y: scroll;
+}
+
+.detallestitulo {
+
+  color: gray;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+}
+
+.listaingresos {
+  font-size: 0.875rem;
+  padding: 17px;
+  display: grid;
+
+  line-height: 1.25rem;
+  grid-template-columns: repeat(5, 1fr) 40px 40px;
+  align-items: baseline;
+}
+
+.loading {
+  height: calc(100vh - 56px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.example-card {
+  margin-bottom: 20px;
+  height: 100px;
+  cursor: pointer;
+}
+.example-card:hover {
+  background-color: whitesmoke;
+}
+.example-header-image {
+  height: 40px;
+  background-color: teal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.detallesheader{
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 70px repeat(4,1fr) ;
+    justify-items: center;
+    border-bottom: solid 1px #dddddd;
+}
+.listadoproductos{
+
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 70px repeat(4,1fr) ;
+    justify-items: center;
+}
+.pedido{
+ height: 500px;
+ 
+}

@@ -1,0 +1,21 @@
+@import '~@angular/material/theming';
+
+$custom-fonts:mat-typography-config(
+
+$font-family:"Quicksand"
+
+);
+@include mat-core($custom-fonts);
+
+
+$candy-app-primary: mat-palette($mat-teal,600);
+$candy-app-accent:  mat-palette($mat-pink, A200, A100, A400);
+
+
+$candy-app-warn:    mat-palette($mat-purple ,500);
+
+
+$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+
+
+@include angular-material-theme($candy-app-theme);

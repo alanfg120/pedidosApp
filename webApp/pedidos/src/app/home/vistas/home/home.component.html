@@ -1,0 +1,91 @@
+<mat-toolbar>
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon
+      [ngClass]="{
+        iconpedidos: titulo === 'Pedidos',
+        iconproductos: titulo === 'Productos',
+        iconclientes: titulo === 'Clientes'
+      }"
+      >menu</mat-icon
+    >
+  </button>
+  <div class="search">
+    <mat-form-field appearance="outline" floatLabel="false" [color]="color">
+      <input matInput placeholder="Buscar" />
+      <mat-icon
+        matSuffix
+        [ngClass]="{
+          iconpedidos: titulo === 'Pedidos',
+          iconproductos: titulo === 'Productos',
+          iconclientes: titulo === 'Clientes'
+        }"
+        >search</mat-icon
+      >
+    </mat-form-field>
+  </div>
+
+  <img
+    src="./../../../assets/img/home.png"
+    alt=""
+    srcset=""
+    width="50"
+    height="50"
+  />
+  <span class="animated fadeIn fast" style="margin-left: 8px"> </span>
+  <span class="example-spacer"></span>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon
+      [ngClass]="{
+        iconpedidos: titulo === 'Pedidos',
+        iconproductos: titulo === 'Productos',
+        iconclientes: titulo === 'Clientes'
+      }"
+      >power_settings_new</mat-icon
+    >
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <span>Cerrar Sesion</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" class="example-container" opened="true">
+    <h3
+      class="menutittle"
+      [ngClass]="{
+        iconpedidos: titulo === 'Pedidos',
+        iconproductos: titulo === 'Productos',
+        iconclientes: titulo === 'Clientes'
+      }"
+    >
+      {{ titulo }}
+    </h3>
+    <mat-list>
+      <mat-action-list class="menuicon">
+        <button mat-list-item class="menuicon" routerLink="pedidos">
+          <span class="mdi mdi-cart-outline iconpedidos iconmenu"> </span>
+          <span class="iconpedidos">Pedidos</span>
+        </button>
+      </mat-action-list>
+      <mat-action-list class="menuicon">
+        <button mat-list-item class="menuicon" routerLink="productos">
+          <span class="mdi mdi-format-list-bulleted iconproductos iconmenu">
+          </span>
+          <span class="iconproductos">Productos</span>
+        </button>
+      </mat-action-list>
+      <mat-action-list class="menuicon">
+        <button mat-list-item class="menuicon" routerLink="clientes">
+          <span class="mdi mdi-account-outline iconclientes iconmenu"> </span>
+          <span class="iconclientes">Clientes</span>
+        </button>
+      </mat-action-list>
+    </mat-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="contenedor">
+    <router-outlet (activate)="router($event)"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

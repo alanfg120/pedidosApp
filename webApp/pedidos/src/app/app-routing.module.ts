@@ -3,16 +3,16 @@ import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
 
 const routes: Routes = [
   {
-    path:'login',
+    path:'',
     loadChildren:"./login/login.module#LoginModule"
   },
   {
     path:'home',
-    loadChildren:"./pedidos/pedidos.module#PedidosModule"
+    loadChildren:"./home/home.module#HomeModule"
   },
   {
     path:'**',
-    loadChildren:"./pedidos/pedidos.module#PedidosModule"
+    loadChildren:"./login/login.module#LoginModule"
   }
 ];
 
@@ -26,3 +26,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
+

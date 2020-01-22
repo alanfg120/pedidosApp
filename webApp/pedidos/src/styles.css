@@ -2,3 +2,42 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+.animated {
+    -webkit-animation-duration: 0.5s;
+    animation-duration: 0.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+
+  @keyframes slideInDown {
+    from {
+      transform: translate3d(0, -100%, 0);
+      visibility: visible;
+    }
+  
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+  
+  .slideInDown {
+    animation-name: slideInDown;
+  }
+  
+  ::-webkit-scrollbar{
+    width: 6px;
+    background-color: white;
+  }
+  ::-webkit-scrollbar-track{
+  
+    border-radius: 5px;
+    background-color: #ffffff;
+  }
+  ::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background-color: #afafaf;
+   
+  }
