@@ -1,9 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteEvent.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclientesBloc.dart';
 import 'package:pedidos/src/componentes/clientes/vistas/clientesPage.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosBloc.dart';
 import 'package:pedidos/src/componentes/pedidos/vistas/pedidosPage.dart';
+import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoBloc.dart';
+import 'package:pedidos/src/componentes/productos/blocs/formproductoBloc/formproductoEvent.dart';
 import 'package:pedidos/src/componentes/productos/vistas/productosPage.dart';
 
 import 'package:flutter_icons/flutter_icons.dart';
@@ -136,11 +142,14 @@ class _HomePageState extends State<HomePage> {
   void add(int currentindex,PedidosBloc bloc) {
 
        switch (currentindex) {
-                case 0  : Navigator.pushNamed(context, 'formpedidos');     
+                case 0  : Navigator.pushNamed(context, 'formpedidos');
+                          BlocProvider.of<FormPedidosBloc>(context)..add(AddPedido())..add(ResetProducto());     
                           break;
-                case 1  : Navigator.pushNamed(context, 'formproducto');     
+                case 1  : Navigator.pushNamed(context, 'formproducto'); 
+                          BlocProvider.of<FormProductoBloc>(context).add(AddproductoForm());     
                           break;
-                case 2  : Navigator.pushNamed(context, 'formcliente');     
+                case 2  : Navigator.pushNamed(context, 'formcliente'); 
+                          BlocProvider.of<FormClienteBloc>(context).add(AddclienteForm());  
                           break;
                 default :
        }

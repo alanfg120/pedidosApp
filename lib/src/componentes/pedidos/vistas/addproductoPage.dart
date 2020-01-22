@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/productos/data/repositorioProductos.dart';
 import 'package:pedidos/src/componentes/productos/models/productosClass.dart';
 import 'package:pedidos/src/plugins/formato.dart';
@@ -39,7 +37,12 @@ class _AddProductoPageState extends State<AddProductoPage> {
                                    onChanged  : (value){
                                                   formpedidoBloc.add(SearchEvent(value,'productos'));
                                                 },
+                                   onEditingComplete: (){
+                                     Navigator.pop(context);
+                                   }, 
+                                            
                                    ),
+                                   
                       actions   : <Widget>[
                                   IconButton(
                                   icon      : Icon(Icons.cancel,color: Colors.grey,),
@@ -94,6 +97,7 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
         return ListView.builder(
                itemCount   : productos.length,
                itemBuilder : (context,i){
+                              
                               return  ListTile(
                                       title    : Text(productos[i].productoNombre),
                                       subtitle : Text(formatoMoney(productos[i].precio)),
@@ -104,7 +108,7 @@ Widget resutlSearch(BuildContext context,FormPedidoState state,bloc) {
                                                                        productos[i].select = value;
                                                                        if(value)
                                                                        bloc.add(AddProducto(producto:productos[i]));
-                                                                       else bloc.add(DeleteProductoForm(i));
+                                                                       //else bloc.add(DeleteProductoForm(productos[i].id,i));
                                                                      }); 
                                                  },
                                                ),

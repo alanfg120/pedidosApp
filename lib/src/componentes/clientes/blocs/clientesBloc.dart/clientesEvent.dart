@@ -17,10 +17,11 @@ class UploadClientes extends ClientesEvent{
   String toString() =>'Subiendo Clientes ....';
 }
 class  UpdateClientes extends ClientesEvent{
+  final bool update;
   final Cliente cliente;
-  UpdateClientes(this.cliente);
+  UpdateClientes(this.cliente,this.update);
   @override
-  List<Object> get props => [cliente];
+  List<Object> get props => [cliente,update];
   @override
   String toString() =>'Actulizando Clientes ....';
 }
@@ -32,3 +33,13 @@ class  UploadClienteFireBase extends ClientesEvent{
   @override
   String toString() =>'Subiendo Cliente A firebase ....';
 }
+class SearchClientesEvent extends ClientesEvent{
+  final List<Cliente> clientes;
+  final String query;
+  SearchClientesEvent({this.query,this.clientes});
+    @override
+  List<Object> get props => [query,clientes];
+  @override
+  String toString() =>'Buscando Clientes....';
+}
+

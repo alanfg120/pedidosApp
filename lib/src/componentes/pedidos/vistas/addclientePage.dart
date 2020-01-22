@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pedidos/src/componentes/clientes/data/repositorioCliente.dart';
 import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/bloc.dart';
 
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoState.dart';
+
 
 class AddClientePage extends StatefulWidget {
   AddClientePage({Key key}) : super(key: key);
@@ -83,7 +82,7 @@ class _AddClientePageState extends State<AddClientePage> {
                                             ),
                                             Flexible(
                                               flex: 8,
-                                              child:  listaProductos(state.clientes, bloc),
+                                              child:  listaClientes(state.clientes, bloc),
                                             )
                                             
                                     
@@ -92,28 +91,28 @@ class _AddClientePageState extends State<AddClientePage> {
            
                     }
                    
-                   return listaProductos(state.clientes,bloc);
+                   return listaClientes(state.clientes,bloc);
                       
            
  
 }
 
- Widget listaProductos(List<Cliente> clientes,bloc) {
+ Widget listaClientes(List<Cliente> clientes,bloc) {
         return ListView.builder(
               itemCount: clientes.length,
               itemBuilder: (context,i){
+                        
                          return  ListTile(
                                   title: Text(clientes[i].nombre),
-                                  trailing:Checkbox(
-                                           value: clientes[i].select,
-                                           onChanged: (value){
-                                                              setState(() {
-                                                                clientes[i].select = value;
-                                                                if(value)
-                                                                bloc.add(AddCliente(cliente:clientes[i]));
-                                                              }); 
-                                                             },
-                                          ),
+                                  trailing:RaisedButton(
+                                    color: primaryColor,
+                                    child: Text("Agregar",style: TextStyle(color: Colors.white)),
+                                    onPressed: (){
+                                      bloc.add(AddCliente(cliente:clientes[i]));
+                                      Navigator.pop(context);
+                                    }
+                                  )
+                                
                            );
               },          
         );

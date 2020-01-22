@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesBloc.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesEvent.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteEvent.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclienteState.dart';
-import 'package:pedidos/src/componentes/clientes/blocs/formclientBloc.dart/formclientesBloc.dart';
+import 'package:pedidos/src/componentes/clientes/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/clientes/models/clienteClass.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoBloc.dart';
-import 'package:pedidos/src/componentes/pedidos/blocs/formpedidoBloc/formpedidoEvent.dart';
+import 'package:pedidos/src/componentes/pedidos/blocs/bloc.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
 
 class FormCliente extends StatefulWidget {
@@ -159,9 +154,9 @@ class _FormClienteState extends State<FormCliente> {
                 child     : Icon(Icons.check),
                 onPressed : () {
                                if (_clientes.currentState.validate()){
-                                    formclienteBloc.add(AddclienteForm(state.cliente));
+                                    formclienteBloc.add(AddclienteForm());
                                     formpedidoBloc.add(UpdateClienteForm(state.cliente));
-                                    clientesBloc.add(UpdateClientes(state.cliente));
+                                    clientesBloc.add(UpdateClientes(state.cliente,state.updateCliente));
                                     Navigator.pop(context);
                                   }
                               },
