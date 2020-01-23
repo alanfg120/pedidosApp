@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesEvent.dart';
 import 'package:pedidos/src/componentes/clientes/blocs/clientesBloc.dart/clientesState.dart';
 import 'package:pedidos/src/componentes/clientes/data/repositorioCliente.dart';
@@ -8,7 +7,7 @@ import 'package:pedidos/src/plugins/uid.dart';
 
 class ClientesBloc extends Bloc<ClientesEvent, ClientesState> {
   ClientesRepositorio repo;
-  ClientesBloc({@required this.repo});
+  ClientesBloc({this.repo});
 
   @override
   ClientesState get initialState => LoadingClientes();

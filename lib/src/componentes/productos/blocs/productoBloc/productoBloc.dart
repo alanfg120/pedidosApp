@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoEvent.dart';
 import 'package:pedidos/src/componentes/productos/blocs/productoBloc/productoState.dart';
 import 'package:pedidos/src/componentes/productos/data/repositorioProductos.dart';
@@ -8,7 +7,7 @@ import 'package:pedidos/src/plugins/uid.dart';
 
 class ProductosBloc extends Bloc<ProductosEvent, ProductosState> {
   ProductosRepocitorio repo;
-  ProductosBloc({@required this.repo});
+  ProductosBloc({this.repo});
 
   @override
   ProductosState get initialState => LoadingProductos();

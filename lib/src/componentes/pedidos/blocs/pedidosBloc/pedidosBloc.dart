@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosEvent.dart';
 import 'package:pedidos/src/componentes/pedidos/blocs/pedidosBloc/pedidosState.dart';
 import 'package:pedidos/src/componentes/pedidos/data/repositorioPedidos.dart';
@@ -8,7 +7,7 @@ import 'package:pedidos/src/componentes/pedidos/models/pedidosClass.dart';
 
 class PedidosBloc extends Bloc<PedidosEvent, PedidosState> {
   PedidosRepositorio repo;
-  PedidosBloc({@required this.repo});
+  PedidosBloc({this.repo});
   List<Pedido> initialPedidos;
   @override
   PedidosState get initialState => LoadingPedidos();
